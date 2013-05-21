@@ -435,12 +435,12 @@ class ALump_Post extends ALump_Model {
 	}
 	
 	public function permalink(){
-		$this->permalink = ALump::$options->siteUrl($this->slug).ALump::$options->suffix;
+		$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
 		echo $this->permalink;
 	}
 	
 	public function getPermalink(){
-		$this->permalink = ALump::$options->siteUrl($this->slug).ALump::$options->suffix;
+		$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
 		return $this->permalink;
 	}
 	
