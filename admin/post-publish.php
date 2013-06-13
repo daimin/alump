@@ -16,7 +16,9 @@
     <?php 
      ALump::Lump("Metas_Category_List")->to($categorys);
      ?>
-     <?php $categorys->parse('<option value="{slug}">{name}</option>')?>
+     <?php while($category = $categorys->next()):?>
+     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
+     <?php endwhile?>
      </select>
   </span>
   <span style="float:right">
@@ -25,7 +27,9 @@
     <?php 
      ALump::Lump("Metas_Category_List")->to($categorys);
      ?>
-     <?php $categorys->parse('<option value="{slug}">{name}</option>', 'category')?>
+     <?php while($category = $categorys->next()):?>
+     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
+     <?php endwhile?>
      </select>
     <input type="submit" value="筛选" onclick="do_filter();"/>
   </span>

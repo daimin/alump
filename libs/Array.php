@@ -46,71 +46,75 @@ class ALump_Array {
 	public function size(){
 		return count($this->data);
 	}
-	/**
-	 * 把数组解析到指定的格式
-	 * 参数1：解析格式化字符串
-	 * 参赛2：可以是标签的名字，也可以是指定的值
-	 */
-	public function parse($fmt, $relVal=""){
-		$fmt = strtolower($fmt);
-		preg_match_all('/{([a-zA-Z0-9]+)}/i', $fmt, $matches);
+	
+// 	/**
+// 	 * 把数组解析到指定的格式
+// 	 * 参数1：解析格式化字符串
+// 	 * 参赛2：可以是标签的名字，也可以是指定的值
+// 	 */
+// 	public function parse($fmt, $relVal=""){
+// 		$fmt = strtolower($fmt);
+// 		preg_match_all('/{([a-zA-Z0-9]+)}/i', $fmt, $matches);
 		
-		if(empty($matches) || count($matches) < 2){
-			return "";
-		}
+// 		if(empty($matches) || count($matches) < 2){
+// 			return "";
+// 		}
 		
-		$parseAttr = $matches[1];
-		// 得到渲染类别 1 是option,2是li
-		$ftype = 0;
-		if(strpos($fmt, '<option') !== False){
-			$ftype = 1;
-		}else if(strpos($fmt, '<li')!== False){
-			$ftype = 2;
-		}
+// 		$parseAttr = $matches[1];
+// 		// 得到渲染类别 1 是option,2是li
+// 		$ftype = 0;
+// 		if(strpos($fmt, '<option') !== False){
+// 			$ftype = 1;
+// 		}else if(strpos($fmt, '<li')!== False){
+// 			$ftype = 2;
+// 		}
 
- 		$to = array();
- 		
-		foreach ($this->data as $key=>$val){
-			$rep = $fmt;
+//  		$to = array();
+
+// 		foreach ($this->data as $key=>$val){
+// 			$rep = $fmt;
 			
-			for($i =0,$len=count($matches[0]);$i < $len;$i++){
-				$attr = $matches[1][$i];
-				$rattr = $matches[0][$i];
-
-				switch($ftype){
-					case 1: // option
+// 			for($i =0,$len=count($matches[0]);$i < $len;$i++){
+// 				$attr = $matches[1][$i];
+// 				$rattr = $matches[0][$i];
+				
+// 				switch($ftype){
+// 					case 1: // option
 						
-						$oval = $val->$attr;
+// 						$oval = $val->$attr;
 						
-						$compVal = ALump::$request->request($relVal);
-						if(empty($relVal)){
-							$compVal = $relVal;
-						}
+// 						$compVal = ALump::$request->request($relVal);
+// 						if(empty($relVal)){
+// 							$compVal = $relVal;
+// 						}
 						
-						if($oval == $compVal){
-							$repss = explode(">", $rep);
-							$rep = $repss[0].' selected="selected" >'.$repss[1];
-						}
-						break;
-					case 2:
-						$val->getPermalink();
-						$oval = $val->$attr;
-						//echo $oval;
+// 						if($oval == $compVal){
+// 							$repss = explode(">", $rep);
+// 							$rep = $repss[0].' selected="selected" >'.$repss[1].'>';
+							
+// 						}
+// 						break;
+// 					case 2:
+// 						$val->getPermalink();
+// 						$oval = $val->$attr;
+// 						//echo $oval;
 					    
-						break;
-					default:
-						break;
-				}
-			echo '|'.$rattr.'|';
-				$rep = str_replace($rattr, $val->$attr, $rep);
+// 						break;
+// 					default:
+// 						break;
+// 				}
+// 			    //echo '|'.$rattr.'|';
+// 				$rep = str_replace($rattr, $val->$attr, $rep);
 
-			}
-			//echo $rep;
-			array_push($to, $rep);
-		}
+// 			}
+// 			echo $rep;
+// 			array_push($to, $rep);
+// 		}
 		
- 		return implode("", $to);
-	}
+//  		return implode("", $to);
+// 	}
+	
+	
 	
 	/*
 	 * 返回内部的数组数据

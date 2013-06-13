@@ -16,7 +16,12 @@
    <?php 
      ALump::Lump("Metas_Tags_Admin")->to($tags);
      ?>
-     <?php $tags->parse('<span class="checkbox-span"><input type="checkbox" value="{id}" id="id_{slug}" name="{slug}"><label for="id_{slug}">{name}</label></span>')?>
+     <?php while($tag = $tags->next()):?>
+     <span class="checkbox-span">
+         <input type="checkbox" value="<?php echo $tag->id?>" id="id_<?php echo $tag->slug?>" name="<?php echo $tag->slug?>">
+         <label for="id_<?php echo $tag->slug?>"><?php echo $tag->name?></label>
+     </span>
+     <?php endwhile?>
 </div>
 </div>
 <div class="form-div div-right side-right-div">

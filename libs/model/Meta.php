@@ -89,9 +89,14 @@ class ALump_Meta extends ALump_Model {
 	 * 获取所有的分类
 	 * @return ALump_Array
 	 */
-	public static function getCategorys(){
+	public static function getCategorys($postsListSize = False){
 		$db = ALump_Db::getInstance();
-		$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='category'","order"=>"`order` asc"));
+		if(empty($postsListSize)){
+			$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='category'","order"=>"`order` asc"));
+		}else{
+			$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='category'", "order"=>"`count` desc limit 0, $postsListSize"));
+		}
+		
 		$rows = $db->fetch_array();
 		$categorys = new ALump_Array();
 		
@@ -104,6 +109,7 @@ class ALump_Meta extends ALump_Model {
 		return $categorys;
 	
 	}
+	
 	
 	/**
 	 * 获得所有的标签
@@ -282,6 +288,16 @@ class ALump_Meta extends ALump_Model {
 		}else{
 			echo $else;
 		}
+	}
+	
+	public function permalink(){
+		if($this->type == "category"){
+			$this->permalink = ALump::$options->siteUrl("/category/".$this->slug).ALump::$options->suffix;
+		}else if($this->type == "tag"){
+			$this->permalink = ALump::$options->siteUrl("/tag/".$this->slug).ALump::$options->suffix;
+		}
+		
+		echo $this->permalink;
 	}
 	
 }

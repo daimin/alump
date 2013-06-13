@@ -3,14 +3,16 @@ class ALump {
 	public static $options = null;
 	public static $request = null;
 	
-	private $funcName = "";
+	private $_funcName = "";
+	private $_param = "";
 	
-	private function __construct($name){
-		$this->funcName = self::toFunctionName($name);
+	private function __construct($name, $param){
+		$this->_funcName = self::toFunctionName($name);
+		$this->_param = $param;
 	}
 	
-	public static function  Lump($name){
-		return new ALump($name);
+	public static function  Lump($name, $param=False){
+		return new ALump($name, $param);
 	}
 	
 	private static function toFunctionName($lumpName){
@@ -18,8 +20,9 @@ class ALump {
 	}
 	
 	public function to(&$attr){
-		$fname = $this->funcName;
-		return $attr = $this->$fname();
+		$fname = $this->_funcName;
+		$params = $this->_getParams();
+		return $attr = $this->$fname($params);
 	}
 	/**
 	 * 获得分类列表
@@ -87,6 +90,36 @@ class ALump {
 	public function ContentsPostRecent(){
 		return ALump_Post::getRecentPosts(null, ALump::$options->postsListSize);
 	}
+	
+	/**
+	 * 取得类别列表，列表元素个数根据postsListSize配置
+	 * @return Ambigous <NULL, ALump_Array>
+	 */
+	public function WidgetMetasCategoryList(){
+		return ALump_Meta::getCategorys(ALump::$options->postsListSize);
+	}
+	
+	private function _getParams(){
+		if(empty($this->_param)){
+			return False;
+		}
+		$params = explode("&", $this->_param);
+		$paramsArr = array();
+		foreach($params as $p){
+			$ps = explode("=", $p);
+			$paramsArr[$ps[0]] = $ps[1];
+		}
+		
+		return $params;
+	}
+	
+	public function WidgetContentsPostDate($params){
+		if($params['type'] == "month"){
+			return ALump_Archive::getByMonth($params['format'], ALump::$options->postsListSize);
+		}
+		
+	}
+	
 	
 	
 	

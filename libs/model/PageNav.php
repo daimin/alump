@@ -25,6 +25,9 @@ class ALump_PageNav {
 	}
 	
 	public function getStart(){
+		if($this->pageno <= 0){
+			$this->pageno = 1;
+		}
 		return $this->startCount = ($this->pageno - 1) * $this->pagesize; // 分页开始
 	}
 	

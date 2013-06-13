@@ -223,7 +223,6 @@ class ALump_Post extends ALump_Model {
 		
 		foreach($rows as $row){
 			$post = new ALump_Post($row);
-			$post->getPermalink();
 			$posts->add($post);
 		}
 		
@@ -435,12 +434,21 @@ class ALump_Post extends ALump_Model {
 	}
 	
 	public function permalink(){
-		$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
+		if($this->type == "post"){
+			$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
+		}else if($this->type == "page"){
+			$this->permalink = ALump::$options->siteUrl("/page/".$this->slug).ALump::$options->suffix;
+		}
+		
 		echo $this->permalink;
 	}
 	
 	public function getPermalink(){
-		$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
+	    if($this->type == "post"){
+			$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
+		}else if($this->type == "page"){
+			$this->permalink = ALump::$options->siteUrl("/page/".$this->slug).ALump::$options->suffix;
+		}
 		return $this->permalink;
 	}
 	
