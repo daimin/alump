@@ -20,10 +20,9 @@
         <div class="widget">
 			<h3><?php _e('分类'); ?></h3>
             <ul>
-                <?php $this->alump('Widget_Metas_Category_List')->to($categorys);?>
+                <?php $this->alump('Metas_Category_List')->to($categorys);?>
                
                 <?php while($category = $categorys->next()):?>
-                
                 <li><a href="<?php $category->permalink()?>"><?php echo $category->name?></a> <?php echo $category->count?></li>
                 <?php endwhile?>
             </ul>
@@ -34,8 +33,11 @@
         <div class="widget">
 			<h3><?php _e('归档'); ?></h3>
             <ul>
-                <?php $this->alump('Widget_Contents_Post_Date', 'type=month&format=F Y')
-                ->parse('<li><a href="{permalink}">{date}</a></li>'); ?>
+                <?php $this->alump('Contents_Post_Date', 'type=month&format=F Y')->to($archives) ?>
+                <?php while($archive = $archives->next()):?>
+                <li><a href="<?php $archive->permalink()?>"><?php echo $archive->name ?></a></li>
+                <?php endwhile?>
+                
             </ul>
 		</div>
         <?php endif; ?>
@@ -44,14 +46,14 @@
 		<div class="widget">
 			<h3><?php _e('其它'); ?></h3>
             <ul>
-                <?php if($this->user->hasLogin()): ?>
-					<li class="last"><a href="<?php $this->options->adminUrl(); ?>"><?php _e('进入后台'); ?> (<?php $this->user->screenName(); ?>)</a></li>
+                <?php if($this->hasLogin()): ?>
+					<li class="last"><a href="<?php $this->options->adminUrl(); ?>"><?php _e('进入后台'); ?> (<?php $this->loginUser()->nickName(); ?>)</a></li>
                     <li><a href="<?php $this->options->logoutUrl(); ?>"><?php _e('退出'); ?></a></li>
                 <?php else: ?>
                     <li class="last"><a href="<?php $this->options->adminUrl('login.php'); ?>"><?php _e('登录'); ?></a></li>
                 <?php endif; ?>
                 <li><a href="http://validator.w3.org/check/referer">Valid XHTML</a></li>
-                <li><a href="http://www.typecho.org">Typecho</a></li>
+                <li><a href="http://xiaolan.tk/">XiaoLan</a></li>
             </ul>
 		</div>
         <?php endif; ?>

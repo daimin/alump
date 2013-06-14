@@ -39,7 +39,7 @@
       <tr <?php $posts->alt(' class="even"', ''); ?> id="page_<?php echo $post->id?>">
       <td><input type="checkbox" name="ids" value="<?php echo $post->id?>"/></td>
       <td>
-        <a class="row_name" href="post-edit.php?id=<?php echo $post->id?>"><?php echo $post->title?><?php $post->onDraft('<span class="markup">草稿</span>')?></a>
+        <a class="row_name" href="page-edit.php?id=<?php echo $post->id?>"><?php echo $post->title?><?php $post->onDraft('<span class="markup">草稿</span>')?></a>
       </td>
       <td class="td-list"><?php echo $post->author()->name?></td>
       <td class="td-list"><?php echo ALump_Date::format($post->created, "Y-m-d")?></td>

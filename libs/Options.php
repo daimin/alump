@@ -147,7 +147,7 @@ class ALump_Options{
 		}
 	}
 	
-	public function adminUrl($path){
+	public function adminUrl($path=""){
 		echo ALump_Common::url($path, $this->adminUrl);
 	}
 	
@@ -189,6 +189,26 @@ class ALump_Options{
 		echo ALump_Common::url($path, $this->siteUrl);
 	}
 	
+	/**
+	 * 网站在根目录的哪个目录
+	 * @return string
+	 */
+	public function siteDir(){
+		$siteurl = $this->siteUrl;
+		//http://127.0.0.1/alump
+		$suburl = substr($siteurl, strpos($siteurl, "//") + 2);
+		$urls = explode("/", $suburl);
+		if(count($urls) >= 2){
+			if(empty($urls[1])){
+				return "/";
+			}else{
+				return '/'.$urls[1];
+			}
+		}else{
+			return "/";
+		}
+	}
+	
 	public function charset(){
 		echo $this->charset;
 	}
@@ -206,6 +226,10 @@ class ALump_Options{
 		echo ALump_Common::url("login.php",$this->adminUrl);
 	}
 	
+	public function logoutUrl(){
+		echo ALump_Common::url("/action/logout/",$this->siteUrl);
+	}
+	
 	public function logoUrl(){
 		
 	}
@@ -220,6 +244,10 @@ class ALump_Options{
 	
 	public function description(){
 		return $this->description;
+	}
+	
+	public function profileUrl(){
+		return $this->adminUrl("profile.php");
 	}
 	
 	

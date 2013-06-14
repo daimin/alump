@@ -9,6 +9,7 @@ class ALump {
 	private function __construct($name, $param){
 		$this->_funcName = self::toFunctionName($name);
 		$this->_param = $param;
+		
 	}
 	
 	public static function  Lump($name, $param=False){
@@ -27,7 +28,7 @@ class ALump {
 	/**
 	 * 获得分类列表
 	 */
-	public function MetasCategoryList(){
+	public function MetasCategoryListAdmin(){
 		return ALump_Meta::getCategorys();
 	}
 	/**
@@ -59,6 +60,12 @@ class ALump {
 	 */
 	public function ContentPostEditAdmin(){
 		return ALump_Post::getPostById(ALump::$request->get('id'));
+	}
+	/**
+	 * 获得编辑页面
+	 */
+	public function ContentPageEditAdmin(){
+		return ALump_Post::getPageById(ALump::$request->get('id'));
 	}
 	/**
 	 * 获得分类列表
@@ -95,7 +102,7 @@ class ALump {
 	 * 取得类别列表，列表元素个数根据postsListSize配置
 	 * @return Ambigous <NULL, ALump_Array>
 	 */
-	public function WidgetMetasCategoryList(){
+	public function MetasCategoryList(){
 		return ALump_Meta::getCategorys(ALump::$options->postsListSize);
 	}
 	
@@ -110,14 +117,17 @@ class ALump {
 			$paramsArr[$ps[0]] = $ps[1];
 		}
 		
-		return $params;
+		return $paramsArr;
 	}
 	
-	public function WidgetContentsPostDate($params){
-		if($params['type'] == "month"){
-			return ALump_Archive::getByMonth($params['format'], ALump::$options->postsListSize);
-		}
+	public function ContentsPostDate($params){
+		return ALump_Archive::getArchive($params['format'],  $params['type'], ALump::$options->postsListSize);
 		
+	}
+	
+	public function CommentsPage($params){ 
+		return ALump_Comment::getCommentsPage($params['pageid'],  ALump::$options->commentsPageSize);
+	
 	}
 	
 	

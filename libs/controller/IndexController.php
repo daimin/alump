@@ -8,12 +8,16 @@ class ALump_IndexController extends Alump_BaseController {
 	public static $PARAMS_COUNT = 4;
 	
 	
-	function __construct($type, $pageno){
-		parent::__construct($type);
+	function __construct(){
+		parent::__construct();
+		
+	}
+	
+	function index($pageno = 1){
 		$this->_pageno = $pageno;
 		$this->_data = ALump_Post::getRecentPosts($this->_pageno);
 		
-		include ALump_Common::getTheme("index.php");
+		$this->view("index.php");
 	}
 	
 	public function next(){

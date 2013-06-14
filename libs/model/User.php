@@ -61,6 +61,10 @@ class ALump_User extends ALump_Model {
 	
 	}
 	
+	public function nickName(){
+		echo $this->nickname;
+	}
+	
 	
 	
 	

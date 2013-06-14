@@ -39,6 +39,7 @@ class ALump_Common{
 	public static $COOKIE_SECRET = 'y2hjJj2IxGcIbvJMQY0';
 	
 	public static $COOKIE_AUTH_NAME = 'ALUMP_USER_COOKIE';
+	public static $COOKIE_REMEMBER_KEY = 'ALUMP_REMEMBER_COOKIE';
 	/*AJAX返回值*/
 	public static $SUCCESS = 1;
 	public static $FAILURE = 0;
@@ -308,6 +309,17 @@ class ALump_Common{
 			preg_match_all("/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/", $str, $info);
 			return sizeof($info[0]);
 		}
+	}
+	
+	public static function javascript($script){
+		header("Content-type:text/html");
+	   	echo <<<EOT
+	   	<html>
+<script type="text/javascript">
+$script;
+</script>
+	   	</html>
+EOT;
 	}
 
 	

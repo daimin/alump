@@ -95,7 +95,7 @@ function doRedirect($post){
 
 if($action == 'page_add'){
 
-    $page = getPageValue();
+    $page = getPageValue(false);
     
 	$pageid = Alump_Post::save($page);
 	

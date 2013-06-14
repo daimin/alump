@@ -21,16 +21,16 @@ if(!empty($login)){
   <meta charset="UTF-8">
   <title><?php echo ALump_Common::$CMS_NAME?> | <?php echo ALump_Common::$VERSION_INFO?></title>
   <style type="text/css">
-* { font-family:"Microsoft YaHei",Segoe UI,Tahoma,Arial,Verdana,sans-serif; }
+* { font-family:"songti",Segoe UI,Tahoma,Arial,Verdana,sans-serif; }
 body { background:#f9f9f9; font-size:14px; }
 #login_title { text-align:center; width:360px; margin:120px auto; margin-bottom:0px; font-size:32px; color:#333;  text-shadow: 0 2px 0 #FFFFFF;}
 #login_form { width:360px; margin:0 auto; margin-top:20px; border:solid 1px #e0e0e0; background:#fff; border-radius:3px 3px 3px 3px;}
 #login_form_box { padding:16px; }
 #login_form .label { font-weight:bold; padding-bottom:6px; color:#333; }
 #login_form .textbox input { border:none; padding:0; font-size:24px; width:312px; color:#333; }
-#login_form .textbox { border:1px solid #e0e0e0; padding:6px; margin-bottom:20px; border-radius:3px 3px 3px 3px; }
+#login_form .textbox { border:1px solid #e0e0e0; padding:3px; margin-bottom:20px; border-radius:3px 3px 3px 3px; }
 #login_form .bottom { text-align:right; }
-#login_form .button { padding:8px 16px; font-size:14px; }
+#login_form .button { padding:6px 16px; font-size:14px; }
   </style>
 </head>
 <body>

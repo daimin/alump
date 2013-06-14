@@ -71,6 +71,12 @@ class ALump_Logger {
 		}
 		clearstatcache ();
 		// 写日志, 返回成功与否
+		if(is_array($s_message) || is_object($s_message)){
+			ob_start();
+			print_r($s_message);
+			$s_message = ob_get_contents();
+			ob_end_clean();
+		}
 		return error_log ( "$s_now_time $s_message\n", 3, $s_target );
 	}
 	

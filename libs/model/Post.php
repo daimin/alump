@@ -81,7 +81,7 @@ class ALump_Post extends ALump_Model {
 	
 	public static function update($post){
 		$db = ALump_Db::getInstance();
-		$db->update(ALump_Common::getTabName("posts"), $post->toArray(array("id")), "`id`='$post->id'");
+		$db->update(ALump_Common::getTabName("posts"), $post->toArray(array("id", "created", "order")), "`id`='$post->id'");
 	}
 	/**
 	 * 更新缩略名
@@ -273,6 +273,29 @@ class ALump_Post extends ALump_Model {
 		
 	}
 	
+	public static function getPageBySlug($slug){
+		$db = ALump_Db::getInstance();
+		$db->select(ALump_Common::getTabName("posts"), null, array(
+				"where" => "`type`='page' and `slug`='$slug'"));
+		
+		$row = $db->fetch_one();
+		$page = new ALump_Post($row);
+	
+		return $page;
+	
+	}
+	
+	public static function getPageById($id){
+		$db = ALump_Db::getInstance();
+		$db->select(ALump_Common::getTabName("posts"), null, array(
+				"where" => "`type`='page' and `id`='$id'"));
+		
+		$row = $db->fetch_one();
+		$page = new ALump_Post($row);
+		
+		return $page;
+	}
+	
 	/**
 	 * 根据ID得到POST
 	 * @param unknown_type $id
@@ -434,20 +457,14 @@ class ALump_Post extends ALump_Model {
 	}
 	
 	public function permalink(){
-		if($this->type == "post"){
-			$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
-		}else if($this->type == "page"){
-			$this->permalink = ALump::$options->siteUrl("/page/".$this->slug).ALump::$options->suffix;
-		}
-		
-		echo $this->permalink;
+		echo $this->getPermalink();
 	}
 	
 	public function getPermalink(){
 	    if($this->type == "post"){
-			$this->permalink = ALump::$options->siteUrl("/archives/".$this->slug).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/post/t/".$this->slug).ALump::$options->suffix;
 		}else if($this->type == "page"){
-			$this->permalink = ALump::$options->siteUrl("/page/".$this->slug).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/page/p/".$this->slug).ALump::$options->suffix;
 		}
 		return $this->permalink;
 	}

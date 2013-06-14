@@ -7,19 +7,49 @@ class Alump_BaseController {
 	protected $_data = null;
 	protected $_type = null;
 	protected $_themeForm = null;
+	protected $_moduleUrl = "";
+	
+	protected $_remembers = array();
 	
 	public static $PARAMS_COUNT = 0;
 	
 	
-	public function __construct($type){
+	public function __construct(){
 		$this->_themeForm = new ALump_ThemeForm();
 		$this->options = ALump::$options;
-		$this->_type = $type;
+		$this->getModuleUrl();
+		$this->_setVisitUrls();
+		
+		Alump_Cookie::set(ALump_Common::$COOKIE_REMEMBER_KEY, serialize($this->_remembers));
+	}
+	
+	private function _setVisitUrls(){
+		$this->_remembers = unserialize(Alump_Cookie::get(ALump_Common::$COOKIE_REMEMBER_KEY));
+		if($this->_remembers['lastUrls']){
+			$this->_remembers['lastUrls'][count($this->_remembers['lastUrls']) % 10] = ALump::$request->server("REQUEST_URL");
+		}
 	}
 	
 	
 	public function need($script){
 		include ALump_Common::getTheme($script);
+	}
+	
+	public function view($scriptName){
+		include ALump_Common::getTheme($scriptName);
+	}
+	
+	protected  function getModuleUrl($mname = False){
+		$basename = get_class($this); // 传入当前对象得到类名
+		
+		$calss = explode("_", $basename);
+		
+		if(empty($mname)){
+			$mname = "index";
+		}
+		$this->_moduleUrl = strtolower(substr($calss[1], 0, strpos($calss[1], "Controller"))).'/'.$mname.'/';
+		
+		
 	}
 		
 	/**
@@ -63,8 +93,8 @@ class Alump_BaseController {
 		}
 	}
 	
-	public function alump($alump){
-		return ALump::Lump($alump);
+	public function alump($alump, $params = False){
+		return ALump::Lump($alump, $params);
 	}
 	
 	public function _getPageNavUrl($pageno){
@@ -75,9 +105,9 @@ class Alump_BaseController {
 		if($pageno > $pageNav->pagecount){
 			$pageno = $pageNav->pagecount;
 		}
-		if($this->is("index")){
-			return ALump_Common::url("/page/$pageno", $this->options->siteUrl);
-		}
+		
+		
+		return ALump_Common::url('/'.$this->_moduleUrl.'/'. $pageno, $this->options->siteUrl);
 	}
 	
 	protected  function _pageNav($prev = '&laquo;', $next = '&raquo;', $splitPage = 3, $splitWord = '...', $pageno){		
@@ -176,6 +206,17 @@ class Alump_BaseController {
 		echo implode("", $pageArr);
 		echo '</ol>';
 	}
+	
+	public function hasLogin(){
+		return ALump_Common::isLogined();
+	}
+	
+	public function loginUser(){
+		$username = ALump_Common::loginUser();	
+		return ALump_User::getUserByName($username);;
+	}
+	
+
 	
 	
 }

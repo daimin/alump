@@ -14,7 +14,7 @@
   &nbsp;&nbsp;&nbsp;&nbsp;
      <select id="to_category" name="to_category" onchange="post_to_category('to_category','ids')"  ><option value="">转到分类</option>
     <?php 
-     ALump::Lump("Metas_Category_List")->to($categorys);
+     ALump::Lump("Metas_Category_List_Admin")->to($categorys);
      ?>
      <?php while($category = $categorys->next()):?>
      <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
@@ -25,7 +25,7 @@
     <input type="text" name="keyword" id="keyword" placeholder="输入搜索关键字" value="<?php echo ALump::$request->get("keyword")?>">
     <select id="category" name="category"  ><option value="">所有分类</option>
     <?php 
-     ALump::Lump("Metas_Category_List")->to($categorys);
+     ALump::Lump("Metas_Category_List_Admin")->to($categorys);
      ?>
      <?php while($category = $categorys->next()):?>
      <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
