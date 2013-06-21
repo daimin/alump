@@ -4,20 +4,21 @@
  * 不同的链接转发给不同的控制器进行处理
  * @author daimin
  * 主要有几种路由
- * 1 文档 http://localhost/posts/4.html
- * 2 分类 http://localhost/category/default/
- * 3 评论 http://localhost/archives/3.html#comments
- * 4 归档 http://localhost/2013/03/23/
- * 5 页面 http://localhost/start-page.html
- * 6 分页 http://localhost/page/2/
- * 7 标签 http://localhost/tag/av/
  */
 class ALump_Router {
 	
 	public static function service() {
 		$route = new ALump_Router ();
-		//$route->match ();
 		$route->route();
+	}
+	
+	private function  _getUrlSlug($url){
+		$pos = strrpos($url, ALump::$options->suffix);
+		if(empty($pos)){
+			return $url;
+		}else{
+			return substr($url,0, $pos);
+		}
 	}
 	
 	public function route(){
@@ -46,7 +47,7 @@ class ALump_Router {
 		
 		
 		//路由控制
-		if($se_count==1 && $ary_se[0]!='' ){
+		if($se_count == 1 && $ary_se[0] != '' ){
 			$ary_url['controller'] = $ary_se[0];
 		
 		}else if($se_count>1){//计算后面的参数，key-value
@@ -54,7 +55,7 @@ class ALump_Router {
 			$ary_url['method'] = $ary_se[1];
 			
 			for($i = 2;$i < $se_count;$i++){
-				$ary_kv_hash = array(strtolower(trim($ary_se[$i], ALump::$options->suffix)));
+				$ary_kv_hash = array($this->_getUrlSlug(strtolower($ary_se[$i])));
 				
 				$ary_url['pramers'] = array_merge($ary_url['pramers'], $ary_kv_hash);
 			}
@@ -90,12 +91,25 @@ class ALump_Router {
 		}else{
 			if(is_callable(array($obj_module, $method_name))){    //该方法是否能被调用
 				//var_dump($ary_url[pramers]);
-				$pramers = implode(",", $ary_url['pramers']);
+				//$pramers = implode(",", $ary_url['pramers']);
+// 				if(function_exists("call_user_func_array")){
+// 					echo "call_user_func_array";
+// 				}
 				$get_return = False;
-				if(empty($pramers)){
-					$get_return = $obj_module->$method_name();    //执行a方法,并把key-value参数的数组传过去
+				$obj = new $obj_module;
+				if(empty($ary_url['pramers'])){
+					$get_return = call_user_func_array(array($obj, $method_name), array());
+					//$get_return = $obj_module->$method_name();    //执行a方法,并把key-value参数的数组传过去
 				}else{
-				    $get_return = $obj_module->$method_name($pramers);    //执行a方法,并把key-value参数的数组传过去
+				    //$get_return = $obj_module->$method_name($ary_url['pramers']);    //执行a方法,并把key-value参数的数组传过去
+				    foreach($ary_url['pramers'] as $key=>$v){
+				    	 $ps = ALump_Common::multiexplode(array('#','?'), $v);
+				    	 if(!empty($ps)){
+				    	 	$ary_url['pramers'][$key] = $ps[0];
+				    	 }
+				    	 
+				    }
+				    $get_return = call_user_func_array(array($obj, $method_name), $ary_url['pramers']);
 				}
 				
 				if(!is_null($get_return)){ //返回值不为空

@@ -35,7 +35,7 @@ body { background:#f9f9f9; font-size:14px; }
 </head>
 <body>
   <form action="login.php" method="post">
-  <div id="login_title"><?php echo ALump_Common::$VERSION_INFO?></div>
+  <div id="login_title"><?php echo ALump_Common::$CMS_NAME?></div>
   <div id="login_form">
     <div id="login_form_box">
       <div class="label">帐号</div>

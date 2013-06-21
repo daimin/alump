@@ -310,6 +310,70 @@ class ALump_Common{
 			return sizeof($info[0]);
 		}
 	}
+	/**
+	 * 获取客户端IP地址
+	 * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
+	 * @return mixed
+	 */
+	public static function getClientIp($type=0){
+		$type       =  $type ? 1 : 0;
+		static $ip  =   NULL;
+		if ($ip !== NULL) return $ip[$type];
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$arr    =   explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			$pos    =   array_search('unknown',$arr);
+			if(false !== $pos) unset($arr[$pos]);
+			$ip     =   trim($arr[0]);
+		}elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip     =   $_SERVER['HTTP_CLIENT_IP'];
+		}elseif (isset($_SERVER['REMOTE_ADDR'])) {
+			$ip     =   $_SERVER['REMOTE_ADDR'];
+		}
+		// IP地址合法验证
+		$long = sprintf("%u",ip2long($ip));
+		$ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
+		return $ip[$type];		
+	}
+	
+	public static function  showGravatar($email, $size=32, $default="", $rating=""){
+		return 'http://www.gravatar.com/avatar.php?gravatar_id='.md5($email).'&default='.$default.'&size='.$size.'&rating='.$rating;
+	
+	}
+	
+	public static function splitFilePath($filepath){
+		$lastPP = strrpos($filepath, '.');
+		$lastSP = strrpos($filepath, '/');
+		$fext = $fname = $fpath = '';
+		if($lastPP !== False){
+			$fext = substr($filepath, $lastPP);
+		}
+		if($lastPP !== False && $lastSP !== False){
+			$fname = substr($filepath,$lastSP + 1, substr($filepath, $lastPP));
+		}
+		if($lastPP === False && $lastSP !== False){
+			$fname = substr($filepath,$lastSP + 1);
+		}
+		if($lastPP !== False && $lastSP === False){
+			$fname = substr($filepath, 0, $lastPP);
+		}
+		
+		if($lastSP !== False){
+			$fpath = substr($filepath, 0, $lastSP);
+		}else{
+			$fpath = $filepath;
+			
+		}
+		
+		return array($fpath, $fname, $fext);
+		
+	}
+	
+	public static function multiexplode ($delimiters,$string) {
+	
+		$ready = str_replace($delimiters, $delimiters[0], $string);
+		$launch = explode($delimiters[0], $ready);
+		return  $launch;
+	}
 	
 	public static function javascript($script){
 		header("Content-type:text/html");

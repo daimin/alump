@@ -8,6 +8,12 @@ class ALump_Array {
 	
 	public $pageNav = null;
 	
+	/*
+	 * 模块的URL
+	 */
+	private $_moduleUrl = "";
+	
+	
 	
 	
 	/*
@@ -46,74 +52,6 @@ class ALump_Array {
 	public function size(){
 		return count($this->data);
 	}
-	
-// 	/**
-// 	 * 把数组解析到指定的格式
-// 	 * 参数1：解析格式化字符串
-// 	 * 参赛2：可以是标签的名字，也可以是指定的值
-// 	 */
-// 	public function parse($fmt, $relVal=""){
-// 		$fmt = strtolower($fmt);
-// 		preg_match_all('/{([a-zA-Z0-9]+)}/i', $fmt, $matches);
-		
-// 		if(empty($matches) || count($matches) < 2){
-// 			return "";
-// 		}
-		
-// 		$parseAttr = $matches[1];
-// 		// 得到渲染类别 1 是option,2是li
-// 		$ftype = 0;
-// 		if(strpos($fmt, '<option') !== False){
-// 			$ftype = 1;
-// 		}else if(strpos($fmt, '<li')!== False){
-// 			$ftype = 2;
-// 		}
-
-//  		$to = array();
-
-// 		foreach ($this->data as $key=>$val){
-// 			$rep = $fmt;
-			
-// 			for($i =0,$len=count($matches[0]);$i < $len;$i++){
-// 				$attr = $matches[1][$i];
-// 				$rattr = $matches[0][$i];
-				
-// 				switch($ftype){
-// 					case 1: // option
-						
-// 						$oval = $val->$attr;
-						
-// 						$compVal = ALump::$request->request($relVal);
-// 						if(empty($relVal)){
-// 							$compVal = $relVal;
-// 						}
-						
-// 						if($oval == $compVal){
-// 							$repss = explode(">", $rep);
-// 							$rep = $repss[0].' selected="selected" >'.$repss[1].'>';
-							
-// 						}
-// 						break;
-// 					case 2:
-// 						$val->getPermalink();
-// 						$oval = $val->$attr;
-// 						//echo $oval;
-					    
-// 						break;
-// 					default:
-// 						break;
-// 				}
-// 			    //echo '|'.$rattr.'|';
-// 				$rep = str_replace($rattr, $val->$attr, $rep);
-
-// 			}
-// 			echo $rep;
-// 			array_push($to, $rep);
-// 		}
-		
-//  		return implode("", $to);
-// 	}
-	
 	
 	
 	/*
@@ -162,6 +100,12 @@ class ALump_Array {
 	public function setPageNavParams($params){
 		$this->pageNav->params = $params;
 	}
+	/**
+	 * 设置模块的URL
+	 */
+	public  function setModuleUrl($moduleUrl){
+		$this->_moduleUrl = $moduleUrl;
+	}
 	/*
 	 * 返回分页数据
 	 */
@@ -175,6 +119,71 @@ class ALump_Array {
 				<a class="link_button" href="?1=1'.$this->pageNav->params.'&page='.($this->pageNav->pagecount).'">&raquo;</a>
   </span>';
 	}
+	
+	private function _listChildComments($commentId){
+		$ress = array();
+		$childComments = ALump_Comment::getChildComments($commentId);
+		
+		if($childComments->have()){
+			array_push($ress, '<div class="comment-children">');
+			array_push($ress, '<ol class="comment-list">');
+			
+			while($comment = $childComments->next()){
+				
+				array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-child comment-level-odd comment-odd comment-by-author">');
+				array_push($ress, '<div class="comment-author">');
+				array_push($ress, '<img class="avatar" src="'.ALump_Common::showGravatar($comment->mail).'" alt="'.$comment->author.'" width="32" height="32">');
+				array_push($ress, '<cite class="fn"><a href="'.$comment->url.'" rel="external nofollow">'.$comment->author.'</a></cite>');
+				array_push($ress, '</div>');
+				array_push($ress, '<div class="comment-meta">');
+				array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'#comment-'.$comment->id.'">'.ALump_date::format($comment->created, Alump::$options->commentDateFormat).'</a>');
+				array_push($ress, '</div>');
+				array_push($ress, '<p>'.$comment->content.'</p>');
+				array_push($ress, $this->_listChildComments($comment->id));
+				array_push($ress, '<div class="comment-reply">');
+				array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'?replyTo='.$comment->id.'#respond-'.$comment->type.'-'.$comment->post_id.'" rel="nofollow" onclick="return ALumpComment.reply(\'comment-'.$comment->id.'\', '.$comment->id.');">回复</a>');
+				array_push($ress, '</div>');
+				array_push($ress, '</li>');
+			}
+			
+			array_push($ress, '</li>');
+			array_push($ress, '</ol>');
+			array_push($ress, '</div>');
+			
+			return implode("", $ress);
+		}
+		
+	}
+	
+	public function listComments(){
+	
+		$ress = array();
+		array_push($ress, '<ol class="comment-list">');
+
+		
+		foreach($this->data as $comment){
+			
+			array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-parent comment-odd">');
+			array_push($ress, '<div class="comment-author">');
+			array_push($ress, '<img class="avatar" src="'.ALump_Common::showGravatar($comment->mail).'" alt="'.$comment->author.'" width="32" height="32">');
+			array_push($ress, '<cite class="fn"><a href="'.$comment->url.'" rel="external nofollow">'.$comment->author.'</a></cite>');
+			array_push($ress, '</div>');
+			array_push($ress, '<div class="comment-meta">');
+			array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'#comment-'.$comment->id.'">'.ALump_date::format($comment->created, Alump::$options->commentDateFormat).'</a>');
+			array_push($ress, '</div>');
+			array_push($ress, '<p>'.$comment->content.'</p>');
+			array_push($ress, $this->_listChildComments($comment->id));
+			array_push($ress, '<div class="comment-reply">');
+			array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'?replyTo='.$comment->id.'#respond-'.$comment->type.'-'.$comment->post_id.'" rel="nofollow" onclick="return ALumpComment.reply(\'comment-'.$comment->id.'\', '.$comment->id.');">回复</a>');
+			array_push($ress, '</div>');
+			array_push($ress, '</li>');
+		}
+		array_push($ress, '</ol>');
+		
+		echo implode("", $ress);
+	}
+	
+
 }
 
 ?>

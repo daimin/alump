@@ -2,7 +2,6 @@
 
 class ALump_ActionController extends Alump_BaseController {
 	
-	private $_curPost = null;
 	
 	public static $PARAMS_COUNT = 4;
 	
@@ -14,7 +13,8 @@ class ALump_ActionController extends Alump_BaseController {
 	
 	public function logout(){
 		Alump_Cookie::delete(ALump_Common::$COOKIE_AUTH_NAME);
-		header("Location: ".$this->_remembers['lastUrls'][count($this->_remembers) - 2]);
+		header("Location: ".$this->getLastUrl());
+	
 		//ALump_Common::javascript("window.location=history.go(1)");
 	}
 }

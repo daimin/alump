@@ -1,9 +1,9 @@
 <div id="comments">
-            <?php $this->comments()->to($comments); ?>
+            <?php $comments = $this->comments() ?>
             <?php if ($comments->have()): ?>
 			<h4><?php $this->commentsNum(_t('当前暂无评论'), _t('仅有一条评论'), _t('已有 %d 条评论')); ?> &raquo;</h4>
             
-            <?php $comments->pageNav(); ?>
+            <?php $this->pageNav(); ?>
             
             <?php $comments->listComments(); ?>
             
@@ -13,7 +13,7 @@
             <div id="<?php $this->respondId(); ?>" class="respond">
             
             <div class="cancel-comment-reply">
-            <?php //$comments->cancelReply(); ?>
+            <?php $this->cancelReply(); ?>
             </div>
             
 			<h4 id="response"><?php _e('添加新评论'); ?> &raquo;</h4>

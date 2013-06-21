@@ -1,6 +1,6 @@
 <?php
 
-class ALump_PageController extends Alump_BaseController {
+class ALump_PostController extends Alump_BaseController {
 
 	
 	public static $PARAMS_COUNT = 4;
@@ -11,19 +11,19 @@ class ALump_PageController extends Alump_BaseController {
 		parent::__construct();
 	}
 	
-	public  function p($slug, $action = False){
+	public  function t($slug, $action = False){
 		
 		$commable = false;
 	   
-		$this->getModuleUrl('p/'.$slug.$this->options->suffix, 'comment-page-');
-		$this->_curPost = ALump_Post::getPageBySlug($slug);
+		$this->getModuleUrl('t/'.$slug.$this->options->suffix, 'comment-page-');
+		$this->_curPost = ALump_Post::getPostBySlug($slug);
 		if($action == "comment"){
 			$this->doComment($this->_curPost->id);
 		}else if(strpos($action, 'comment-page-') !== False){
 			$this->_comment_no = substr($action, strrpos($action, '-') + 1);
 		}
 		
-		$this->view("page.php");
+		$this->view("post.php");
 	
 	}
 	
@@ -42,6 +42,14 @@ class ALump_PageController extends Alump_BaseController {
 		if(!empty($author)){
 			echo $author->name;
 		}
+		
+	}
+	
+	public function category(){
+		$this->_curPost->category();
+	}
+	
+	public function tags(){
 		
 	}
 	

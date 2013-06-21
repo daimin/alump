@@ -285,6 +285,18 @@ class ALump_Post extends ALump_Model {
 	
 	}
 	
+	public static function getPostBySlug($slug){
+		$db = ALump_Db::getInstance();
+		$db->select(ALump_Common::getTabName("posts"), null, array(
+				"where" => "`type`='post' and `slug`='$slug'"));
+	
+		$row = $db->fetch_one();
+		$post = new ALump_Post($row);
+	
+		return $post;
+	
+	}
+	
 	public static function getPageById($id){
 		$db = ALump_Db::getInstance();
 		$db->select(ALump_Common::getTabName("posts"), null, array(
@@ -438,6 +450,12 @@ class ALump_Post extends ALump_Model {
 		}
 	
 		return $row['morder'];
+	}
+	
+	public static function addCommentNum($postid){
+		$db = ALump_Db::getInstance();
+		$tartab = ALump_Common::getTabName("posts");
+		$db->query("update `$tartab` set comment_count=comment_count+1 where `id`='$postid'");
 	}
 	
 	public function onDraft($with){

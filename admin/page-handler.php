@@ -38,7 +38,13 @@ function getPageValue($isedit=false){
 	
 	
 	$can_comment = ALump::$request->post('can_comment');
+	if(empty($can_comment)){
+		$can_comment = 0;
+	}
 	$can_rss = ALump::$request->post('can_rss');
+	if(empty($can_rss)){
+		$can_rss = 0;
+	}
 	$loguserName = ALump_Common::loginUser();
 	$author = ALump_User::getUserByName($loguserName);
 	

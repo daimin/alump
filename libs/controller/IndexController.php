@@ -1,10 +1,7 @@
 <?php
 
 class ALump_IndexController extends Alump_BaseController {
-	
-	private $_curPost = null;
-	private $_pageno = 1;
-	
+		
 	public static $PARAMS_COUNT = 4;
 	
 	

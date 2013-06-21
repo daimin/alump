@@ -39,12 +39,23 @@ class ALump_Comment extends ALump_Model {
  	
 
 	
-	public static function getCommentsPage($postid, $commentsPageSize = False){
+	public static function getCommentsPage($postid, $commentsPageSize = False, $pageno = 0){
 		$db = ALump_Db::getInstance();
 		$ordersql = "`created` ".ALump::$options->commentsOrder;
-		$db->select(ALump_Common::getTabName("comments"), null, array('where' => " post_id='$postid'", "order" => $ordersql));
 		
-		$comments = new ALump_Array();
+		$count = $db->count(ALump_Common::getTabName("comments"),null,array("where"=>" post_id='$postid' and parent_id=0"));
+		
+		$comments = new ALump_Array($count);
+		
+		if(!empty($pageno)){
+			$comments->pageNav->setPageno($pageno);
+		}
+		
+		$db->select(ALump_Common::getTabName("comments"), null, array(
+				"where" => " post_id='$postid' and `parent_id`=0 ",
+				"order" => $ordersql,
+				"limit" => $comments->pageNav->limitSql()));
+		
 		
 		$rows = $db->fetch_array();
 		
@@ -58,6 +69,40 @@ class ALump_Comment extends ALump_Model {
 		echo $this->nickname;
 	}
 	
+	public static function save($comment){
+		$db = ALump_Db::getInstance();
+	
+		if($db->insert(ALump_Common::getTabName("comments"), $comment->toArray(array("id")))){
+			ALump_Post::addCommentNum($comment->post_id);
+		};
+	
+		return $db->insert_id();
+	}
+	
+	
+	public static function getChildComments($commentid){
+		$db = ALump_Db::getInstance();
+		$ordersql = "`created` ".ALump::$options->commentsOrder;
+		$db->select(ALump_Common::getTabName("comments"), null, array(
+				"where" => " `parent_id`='$commentid'",
+				"order" => $ordersql
+				));
+		
+		
+		$comments = new ALump_Array();
+		$rows = $db->fetch_array();
+		
+		foreach($rows as $row){
+			$comments->add(new ALump_Comment($row));
+		}
+		return $comments;
+		
+	}
+	
+	public static function getCommentCount($postid){
+		$db = ALump_Db::getInstance();
+		return $db->count(ALump_Common::getTabName("comments"), 'id', array("where"=>"`post_id`='$postid'"));
+	}
 	
 	
 	

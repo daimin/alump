@@ -208,6 +208,19 @@ class ALump_Options{
 			return "/";
 		}
 	}
+	/**
+	 * 去掉网站根目录后的url
+	 * @param unknown_type $url
+	 * @return unknown
+	 */
+	public function pathUrl($url){
+		$siteDir = $this->siteDir();
+		if($siteDir == "/"){
+			return $url;
+		}else{
+			return substr($url, strlen($siteDir)) ;
+		}
+	}
 	
 	public function charset(){
 		echo $this->charset;

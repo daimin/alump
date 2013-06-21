@@ -6,6 +6,7 @@ date_default_timezone_set('Asia/Shanghai');
 include __ROOT_DIR__.'/libs/ALump.php';
 include __ROOT_DIR__.'/libs/Array.php';
 include __ROOT_DIR__.'/libs/JSON.php';
+include __ROOT_DIR__.'/libs/Javascript.php';
 include __ROOT_DIR__.'/libs/simple_html_dom.php';
 include __ROOT_DIR__.'/libs/Logger.php';
 include __ROOT_DIR__.'/libs/Common.php';

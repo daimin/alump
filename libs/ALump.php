@@ -126,7 +126,7 @@ class ALump {
 	}
 	
 	public function CommentsPage($params){ 
-		return ALump_Comment::getCommentsPage($params['pageid'],  ALump::$options->commentsPageSize);
+		return ALump_Comment::getCommentsPage($params['pageid'],  ALump::$options->commentsPageSize, $params['pageno']);
 	
 	}
 	
