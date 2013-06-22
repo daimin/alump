@@ -21,9 +21,9 @@ class ALump_Array {
 	 * @param $type 数组的类型
 	 * @param  $itemcount
 	 */
-	public function __construct( $itemcount=0){
+	public function __construct( $itemcount=0, $pagesize=False){
 		$this->data = array();
-		$this->pageNav = new ALump_PageNav($itemcount);
+		$this->pageNav = new ALump_PageNav($itemcount, $pagesize );
 	}
 	/*
 	 * 内部计数器

@@ -22,7 +22,7 @@ class ALump_PostController extends Alump_BaseController {
 		}else if(strpos($action, 'comment-page-') !== False){
 			$this->_comment_no = substr($action, strrpos($action, '-') + 1);
 		}
-		
+		$this->setArchiveTitle(array($this->_curPost->title));
 		$this->view("post.php");
 	
 	}
@@ -46,11 +46,25 @@ class ALump_PostController extends Alump_BaseController {
 	}
 	
 	public function category(){
-		$this->_curPost->category();
+		$category = $this->_curPost->category();
+		if(!empty($category)){
+			$permalink = $category->getPermalink();
+			echo '<a href="'.$permalink.'">'.$category->name.'</a>';
+		}
+		
 	}
 	
 	public function tags(){
+		$tagsArr = array();
+		$tags = $this->_curPost->tags();
+		if($tags && $tags->have()){
+			while($tag = $tags->next()){
+				$tagLink = '<a href="'.$tag->getPermalink().'">'.$tag->name.'</a>';
+				array_push($tagsArr, $tagLink);
+			}
+		}
 		
+		echo implode(", ", $tagsArr);
 	}
 	
 	public function date($fmt){

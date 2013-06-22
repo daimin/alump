@@ -37,8 +37,8 @@ class ALump_Post extends ALump_Model {
 		$this->status = $this->get('status');
 		$this->password = $this->get('password');
 		$this->view_count = $this->get('view_count');
-		$this->comment_count = $this->get('comment_count');
 		$this->allow_comment = $this->get('allow_comment');
+		$this->comment_count = $this->get('comment_count');
 		$this->allow_feed = $this->get('allow_feed');
 		$this->parent_id = $this->get('parent_id');
 	}
@@ -188,6 +188,7 @@ class ALump_Post extends ALump_Model {
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
+			$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 			$posts->add(new ALump_Post($row));
 		}
 	
@@ -222,6 +223,7 @@ class ALump_Post extends ALump_Model {
 		$posts = new ALump_Array();
 		
 		foreach($rows as $row){
+			$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 			$post = new ALump_Post($row);
 			$posts->add($post);
 		}
@@ -252,6 +254,7 @@ class ALump_Post extends ALump_Model {
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
+			$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 			$pages->add(new ALump_Post($row));
 		}
 		
@@ -266,6 +269,7 @@ class ALump_Post extends ALump_Model {
 		$pages = new ALump_Array();
 		$rows = $db->fetch_array();
 		foreach($rows as $row){
+			$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 			$pages->add(new ALump_Post($row));
 		}
 		
@@ -279,6 +283,7 @@ class ALump_Post extends ALump_Model {
 				"where" => "`type`='page' and `slug`='$slug'"));
 		
 		$row = $db->fetch_one();
+		$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 		$page = new ALump_Post($row);
 	
 		return $page;
@@ -291,6 +296,7 @@ class ALump_Post extends ALump_Model {
 				"where" => "`type`='post' and `slug`='$slug'"));
 	
 		$row = $db->fetch_one();
+		$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 		$post = new ALump_Post($row);
 	
 		return $post;
@@ -303,6 +309,7 @@ class ALump_Post extends ALump_Model {
 				"where" => "`type`='page' and `id`='$id'"));
 		
 		$row = $db->fetch_one();
+		$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 		$page = new ALump_Post($row);
 		
 		return $page;
@@ -317,7 +324,7 @@ class ALump_Post extends ALump_Model {
 		$db->select(ALump_Common::getTabName("posts"), null, array(
 				"where" => "`id`='$id'"));
 		$row = $db->fetch_one();
-		
+		$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
 		return new ALump_Post($row);
 	}
 	
@@ -452,11 +459,11 @@ class ALump_Post extends ALump_Model {
 		return $row['morder'];
 	}
 	
-	public static function addCommentNum($postid){
-		$db = ALump_Db::getInstance();
-		$tartab = ALump_Common::getTabName("posts");
-		$db->query("update `$tartab` set comment_count=comment_count+1 where `id`='$postid'");
-	}
+// 	public static function addCommentNum($postid){
+// 		$db = ALump_Db::getInstance();
+// 		$tartab = ALump_Common::getTabName("posts");
+// 		$db->query("update `$tartab` set comment_count=comment_count+1 where `id`='$postid'");
+// 	}
 	
 	public function onDraft($with){
 		if($this->status == ALump_Common::$DRAFT){

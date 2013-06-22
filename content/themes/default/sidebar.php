@@ -15,7 +15,18 @@
 	    </div>
         <?php endif; ?>
 
-
+        <?php if (empty($this->options->sidebarBlock) || in_array('ShowRecentComments', $this->options->sidebarBlock)): ?>
+	    <div class="widget">
+			<h3><?php _e('最近回复'); ?></h3>
+            <ul>
+            <?php $this->alump('Comments_Recent')->to($comments); ?>
+            <?php while($comment = $comments->next()): ?>
+                <li><a href="<?php $comment->permalink(); ?>"><?php $comment->author(false); ?></a>: <?php $comment->excerpt(50, '...'); ?></li>
+            <?php endwhile; ?>
+            </ul>
+	    </div>
+        <?php endif; ?>
+        
         <?php if (empty($this->options->sidebarBlock) || in_array('ShowCategory', $this->options->sidebarBlock)): ?>
         <div class="widget">
 			<h3><?php _e('分类'); ?></h3>

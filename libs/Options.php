@@ -185,8 +185,13 @@ class ALump_Options{
 	
 	
 	
-	public function siteUrl($path=""){
-		echo ALump_Common::url($path, $this->siteUrl);
+	public function siteUrl($path="", $isEcho=True){
+		if($isEcho){
+			echo ALump_Common::url($path, $this->siteUrl);
+		}else{
+			return ALump_Common::url($path, $this->siteUrl);
+		}
+		
 	}
 	
 	/**

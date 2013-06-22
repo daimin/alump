@@ -44,9 +44,10 @@ class ALump_IndexController extends Alump_BaseController {
 	}
 	
 	public function category(){
-		$cate = $this->_curPost->category();
-		if(!empty($cate)){
-			echo $cate->name;
+		$category = $this->_curPost->category();
+		if(!empty($category)){
+			$permalink = $category->getPermalink();
+			echo '<a href="'.$permalink.'">'.$category->name.'</a>';
 		}
 	}
 	

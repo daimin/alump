@@ -20,6 +20,8 @@ class Alump_BaseController {
 	
 	protected $_curPost  = null;
 	
+	protected $_archiveTitle = null;
+	
 	
 	public function __construct(){
 		$this->_themeForm = new ALump_ThemeForm();
@@ -100,8 +102,8 @@ class Alump_BaseController {
 	}
 	
 	protected function doComment($post_id){
-		
 		$author = ALump_Common::removeXSS(ALump::$request->post("author"));
+		
 		$mail = ALump_Common::removeXSS(ALump::$request->post("mail"));
 		
 		$url = ALump_Common::removeXSS(ALump::$request->post("url"));
@@ -114,6 +116,11 @@ class Alump_BaseController {
 		$nickname = "";
 		$created = time();
 		$ip = ALump_Common::getClientIp();
+		// 首先验证下是否可评
+		if(!ALump_Comment::canComment($ip)){
+			$this->_toCommentsUrl("对不起, 您的发言过于频繁, 请稍侯再次发布.");
+			return;
+		}
 		$agent = ALump::$request->server('HTTP_USER_AGENT');
 		$content = ALump_Common::removeXSS(ALump::$request->post("text"));
 		$type = "comment";
@@ -164,9 +171,17 @@ class Alump_BaseController {
 		$this->_toCommentsUrl();
 	}
 	
-	private function _toCommentsUrl(){
+	private function _toCommentsUrl($msg = False){
 		$commentUrl = ALump_Common::url('/'.$this->_moduleUrl."#comments", $this->options->siteUrl);
-		header("location:$commentUrl");
+		
+		if(!empty($msg)){
+			ALump_Javascript::showMaskDiv($msg, $commentUrl);
+			exit();
+		}else{
+			header("location:$commentUrl");
+		}
+		
+		//exit();
 	}
 	
 	
@@ -195,6 +210,12 @@ class Alump_BaseController {
 		
 		
 	}
+	/*
+	 * 参数titles是数组
+	 */
+	protected  function setArchiveTitle($titles){
+		$this->_archiveTitle = $titles;
+	}
 		
 	/**
 	 * 文档标题
@@ -204,7 +225,11 @@ class Alump_BaseController {
 	 */
 	public function archiveTitle($cross, $p2, $sp){
 		//' &raquo; ', '', ' - '
-		echo "";
+		if(!empty($this->_archiveTitle)){
+			echo implode($cross.$p2, $this->_archiveTitle).$p2.$sp.$p2;
+			
+		}
+		
 	}
 	
 	public function header(){
@@ -222,6 +247,7 @@ class Alump_BaseController {
 		
 		if(strpos($this->_moduleUrl,'page/') !== False || strpos($this->_moduleUrl,'post/') !== False){
 			ALump_Javascript::replyCommentJS($this->_curPost->type, $this->_curPost->id);
+			
 		}
 	}
 	

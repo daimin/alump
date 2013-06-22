@@ -131,6 +131,10 @@ class ALump {
 	}
 	
 	
+	public function CommentsRecent(){
+		return ALump_Comment::getCommentsRecent(ALump::$options->commentsListSize);
+	}
+	
 	
 	
 }

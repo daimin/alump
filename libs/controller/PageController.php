@@ -22,7 +22,7 @@ class ALump_PageController extends Alump_BaseController {
 		}else if(strpos($action, 'comment-page-') !== False){
 			$this->_comment_no = substr($action, strrpos($action, '-') + 1);
 		}
-		
+		$this->setArchiveTitle(array($this->_curPost->title));
 		$this->view("page.php");
 	
 	}

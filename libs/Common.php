@@ -336,7 +336,7 @@ class ALump_Common{
 	}
 	
 	public static function  showGravatar($email, $size=32, $default="", $rating=""){
-		return 'http://www.gravatar.com/avatar.php?gravatar_id='.md5($email).'&default='.$default.'&size='.$size.'&rating='.$rating;
+		return 'http://www.gravatar.com/avatar.php?gravatar_id='.md5($email).'&default='.$default.'&size='.$size.'&rating='.ALump::$options->commentsAvatarRating;
 	
 	}
 	
@@ -374,6 +374,34 @@ class ALump_Common{
 		$launch = explode($delimiters[0], $ready);
 		return  $launch;
 	}
+	
+	public static function getContentType($filename){
+		$ppos = strrpos($filename, ".");
+		if($ppos === False){
+			return;
+		}
+		
+		$fext = substr($filename,$ppos );
+		
+		switch($fext){
+			case '.jpe':
+				return 'image/jpeg';
+			case '.jpeg':
+				return 'image/jpeg';
+			case '.jpg':
+				return 'application/x-jpg';
+			case '.png':
+				return '.application/x-png';
+			case '.js':
+			    return 'application/x-javascript';
+			case '.css':
+				return 'text/css';
+			default:
+				return 'text/plain';
+			    	 
+		}
+	}
+
 	
 	public static function javascript($script){
 		header("Content-type:text/html");

@@ -86,6 +86,39 @@ EOT;
 		</script>
 EOT;
 	}
+	
+
+	
+	public static function showMaskDiv($msg, $tarurl){
+		$siteDir = ALump::$options->siteDir();
+		echo <<<EOT
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="all" href="$siteDir/folks/blackbox/css/blackbox.css" />
+<script type="text/javascript" src="$siteDir/folks/jquery"></script>
+<script type="text/javascript" src="$siteDir/folks/blackbox/js/jquery.blackbox.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+		//<![CDATA[
+	$(function(){
+	    var box = new BlackBox();
+		box.alert("$msg", function () {
+           window.location = "$tarurl";
+	    }, {
+	        title: '警告',
+	        value: '关闭'
+	    });
+	});
+	
+		//]]>
+		</script>
+</body>
+</html>
+EOT;
+	}
 
 }
 

@@ -16,6 +16,8 @@ define('__UPLOAD_DIR__', '/content/uploads');
 /** 数据表前缀  **/
 define('__TAB_PREFIX__', 'alump_');
 
+define('__DEBUG__', True);
+
 include __ROOT_DIR__.'/libs/Core.inc.php';
 
 /** 定义数据库参数 */

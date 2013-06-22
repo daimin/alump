@@ -291,13 +291,17 @@ class ALump_Meta extends ALump_Model {
 	}
 	
 	public function permalink(){
+		echo $this->getPermalink();
+	}
+	
+	public function getPermalink(){
 		if($this->type == "category"){
-			$this->permalink = ALump::$options->siteUrl("/category/".$this->slug).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/category/".$this->slug, False).ALump::$options->suffix;
 		}else if($this->type == "tag"){
-			$this->permalink = ALump::$options->siteUrl("/tag/".$this->slug).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/tag/".$this->slug, False).ALump::$options->suffix;
 		}
 		
-		echo $this->permalink;
+		return $this->permalink;
 	}
 	
 }

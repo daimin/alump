@@ -38,6 +38,10 @@ class ALump_Logger {
 	 *        	日志类型
 	 */
 	public static function log($s_message, $s_type = 'log') {
+		if(!defined('__DEBUG__') || __DEBUG__ == False){
+			return;
+		}
+		
 		// 检查日志目录是否可写
 		if (! file_exists ( LOG_PATH )) {
 			@mkdir ( LOG_PATH );
