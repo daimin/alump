@@ -38,9 +38,10 @@ class ALump_Post extends ALump_Model {
 		$this->password = $this->get('password');
 		$this->view_count = $this->get('view_count');
 		$this->allow_comment = $this->get('allow_comment');
-		$this->comment_count = $this->get('comment_count');
 		$this->allow_feed = $this->get('allow_feed');
 		$this->parent_id = $this->get('parent_id');
+        $this->comment_count = $this->get('comment_count');
+      
 	}
 	
 	/**
@@ -73,7 +74,7 @@ class ALump_Post extends ALump_Model {
 	public static function save($post){
 		$db = ALump_Db::getInstance();
 		
-		$db->insert(ALump_Common::getTabName("posts"), $post->toArray(array("id")));
+		$db->insert(ALump_Common::getTabName("posts"), $post->toArray(array("id","comment_count")));
 		
 		return $db->insert_id();
 	}
@@ -81,7 +82,7 @@ class ALump_Post extends ALump_Model {
 	
 	public static function update($post){
 		$db = ALump_Db::getInstance();
-		$db->update(ALump_Common::getTabName("posts"), $post->toArray(array("id", "created", "order")), "`id`='$post->id'");
+		$db->update(ALump_Common::getTabName("posts"), $post->toArray(array("id", "created", "order","comment_count")), "`id`='$post->id'");
 	}
 	/**
 	 * 更新缩略名
@@ -173,6 +174,7 @@ class ALump_Post extends ALump_Model {
 		}
 		
 		$count = $db->count(ALump_Common::getTabName("posts"),null,array("where"=>$where));
+		
 		$posts = new ALump_Array($count);
 		// 如果传递了$pageno那么就设置$pageno
 		if(!empty($pageno)){
@@ -194,6 +196,8 @@ class ALump_Post extends ALump_Model {
 	
 		return $posts;
 	}
+    
+  
 	
 	/**
 	 * 获得最近发表的文章
@@ -250,7 +254,7 @@ class ALump_Post extends ALump_Model {
 		
 		$db->select(ALump_Common::getTabName("posts"), null, array(
 				"where" => $where,
-				"order" => "`order` asc"));
+				"order" => "`id` desc"));
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
@@ -341,14 +345,18 @@ class ALump_Post extends ALump_Model {
 	/**
 	 * 当前POST的类别信息
 	 */
-	public function category(){
+	public function category($isEcho = False){
 		if($this->_category == null){
+            
 			$this->_category = ALump_Meta::getMetasByPostId($this->id);
             
 			if(!empty($this->_category) && $this->_category->size() > 0){
 				$this->_category = $this->_category->get(0);
 			}
 		}
+        if(!empty($this->_category) && $isEcho){
+            echo $this->_category->name;
+        }
 		return $this->_category;
 	}
 
@@ -458,6 +466,97 @@ class ALump_Post extends ALump_Model {
 	
 		return $row['morder'];
 	}
+	/**
+	 * 根据Metas获取POSTS 
+	 */
+	public static function getPostsByMeta($meta=False, $pageno = 1){
+		
+		if(empty($meta)){
+		    return self::getPostsAdmin(ALump_Common::$PUBLISH, $pageno);
+		}
+		
+		$rels = ALump_Relation::getPostsByMeta($meta->id, "post_id desc");
+		//echo count($rels);
+		$count = $rels->size();
+		
+		$pageSize = ALump::$options->pageSize;
+		
+
+		$posts = new ALump_Array($count);
+		
+		// 设置分页的链接参数
+		if(empty($pageno)){
+		    $pageno = 1;
+		}
+		
+		$pagecount = $start = 0;
+		
+		if($count > $pageSize){
+			$pagecount = floor(($count + $pageSize - 1) / $pageSize);
+			if($pageno > $pagecount){
+				$pageno = $pagecount;
+			}
+		    $start =  ($pageno- 1) * $pageSize;	
+		}
+        
+        // 如果传递了$pageno那么就设置$pageno
+		if(!empty($pageno)){
+			$posts->pageNav->setPageno($pageno);
+		}
+        
+		$rels = $rels->items();
+		$rels = array_slice($rels , $start, $pageSize);
+		foreach($rels as $rel){
+			$posts->add(self::getPostById($rel->post_id));
+		}
+	
+		return $posts;
+	}
+    
+    
+    public static function getPostByKeyword($keyword, $pageno=0){
+        
+        if(empty($keyword)){
+		    return self::getPostsAdmin(ALump_Common::$PUBLISH, $pageno);
+		}
+        
+        $db = ALump_Db::getInstance();
+  
+        $subsql = " (`title` like '%$keyword%' or `content` like '%$keyword%') and `type`='post'  ";
+		
+		
+		$count = $db->count(ALump_Common::getTabName("posts"),"id", array("where"=>$subsql));
+		
+		$posts = new ALump_Array($count);
+		// 如果传递了$pageno那么就设置$pageno
+		if(!empty($pageno)){
+            $pageno = 1;
+			$posts->pageNav->setPageno($pageno);
+		}
+		
+		$db->select(ALump_Common::getTabName("posts"), null, array(
+				  "where" => $subsql,
+				  "order" => "`created` desc",
+				  "limit" => $posts->pageNav->limitSql()));
+		$rows = $db->fetch_array();
+		
+		foreach($rows as $row){
+			$row['comment_count'] = ALump_Comment::getCommentCount($row['id']);
+			$posts->add(new ALump_Post($row));
+		}
+	
+		return $posts;
+    }
+    
+    
+    public static function updateViewCount($post){
+        if(!empty($post)){
+           $tarTab = ALump_Common::getTabName("posts");
+		   $db = ALump_Db::getInstance();
+		   return $db->query("update $tarTab set `view_count`=`view_count`+1 where `id`='$post->id'");
+        }
+    }
+	
 	
 // 	public static function addCommentNum($postid){
 // 		$db = ALump_Db::getInstance();

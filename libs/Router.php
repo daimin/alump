@@ -66,28 +66,46 @@ class ALump_Router {
 		$module_name = ucfirst($module_name);
 		$module_file = __ROOT_DIR__.'/libs/controller/'.$module_name.'Controller.php';
 		
+		
 		$method_name = $ary_url['method'];
 		if(file_exists($module_file)){
 			$this->_callModule($module_name,$method_name,$ary_url );
 		}
-		else
-		{
-			ALump_Common::error('模块文件不存在');
-			die();
+		else{
+			//ALump_Common::error('模块文件不存在');
+			$this->_defaultModuleCall();
+			//die();
 		}
+	}
+	
+	private function _defaultModuleCall(){
+		$module_name = "Base";
+		$method_name = "say404";
+		$this->_callModule($module_name,$method_name, array() );
 	}
 	
 	private function _callModule($module_name, $method_name, $ary_url){
 		$module_name = "ALump_".$module_name.'Controller';
+		
 		if(!class_exists($module_name)){
-			ALump_Common::error('类'.$module_name.'不存在');
-			die();
+			$this->_defaultModuleCall();
 		}
 		$obj_module = new $module_name();    //实例化模块m
-
+		
+		
 		if(!method_exists($obj_module, $method_name)){
-			ALump_Common::error('方法不存在');
-			die();
+//		    if(!empty($method_name) && empty($ary_url['pramers'])){
+//                    $ary_url['pramers'] = array($method_name);
+//		    }
+            array_unshift($ary_url['pramers'], $method_name );
+		    $method_name = "index";
+
+		}
+		
+                
+		if(!method_exists($obj_module, $method_name)){
+		    $obj = new $obj_module;
+			$get_return = call_user_func_array(array($obj, "say404"), $ary_url['pramers']);
 		}else{
 			if(is_callable(array($obj_module, $method_name))){    //该方法是否能被调用
 				//var_dump($ary_url[pramers]);
@@ -109,16 +127,16 @@ class ALump_Router {
 				    	 }
 				    	 
 				    }
+				    
 				    $get_return = call_user_func_array(array($obj, $method_name), $ary_url['pramers']);
 				}
 				
 				if(!is_null($get_return)){ //返回值不为空
-					var_dump($get_return);
+				    var_dump($get_return);
 				}
 		
 			}else{
-				ALump_Common::error('该方法不能被调用');
-				die();
+				$this->_defaultModuleCall();
 			}
 		
 		}

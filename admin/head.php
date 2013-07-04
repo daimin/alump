@@ -11,7 +11,10 @@
 <body>
   <div id="main">
   <div id="top">
-    <h3 id="top_title"><a href="<?php echo ALump::$options->siteUrl?>"><?php echo ALump_Common::$CMS_NAME?> <span><?php echo ALump_Common::$VERSION_INFO?></span></a></h3>
+    <h3 id="top_title"><a href="<?php echo ALump::$options->siteUrl?>"><?php echo ALump_Common::$CMS_NAME?> 
+            <span><?php echo ALump_Common::$VERSION_INFO?></span></a>
+        </h3>
+      <div class="title-right"><span>欢迎，<a href="profile.php">admin</a></span><span>|</span><span><a href="<?php ALump::$options->logoutUrl()?>">退出</a></span></div>
     <div class="clear"></div>
   </div>
   

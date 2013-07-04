@@ -23,7 +23,7 @@ select { border:solid 1px #e0e0e0; padding:2px;
 .clear { clear:both; height:0; padding:0; margin:0; font-size:0; border:none; }
 
 
-#content {  margin:0px; auto; background:#fff; float:left;width:87%;}
+#content {  margin:0px auto; background:#fff; float:left;width:87%;}
 #content_box { padding:20px; }
 
 #footer { color:#888; margin-top:20px; padding:12px 0; width:900px; margin:0 auto; font-size:12px; border-top:solid 1px #e0e0e0;float:left; }
@@ -87,7 +87,7 @@ div.updated, div.error {
 .admin_page_name a { margin-left:10px;line-height: 24px;}
 
 .small_form .name { font-size:16px; font-weight:bold; color:#333; }
-.small_form .label { color:#333; padding-bottom:4px; }
+.small_form .label { color:#333; padding-bottom:4px;font-weight:bold;margin-right: 6px; }
 .small_form .field { margin-top:20px; }
 .small_form .textbox { width:95%; border:solid 1px #ccc; padding:4px;
   -webkit-border-radius: 3px;
@@ -97,10 +97,10 @@ div.updated, div.error {
 .small_form .info { color:#666; font-size:12px; padding-top:4px; }
 .small_form .button { padding:6px 20px; }
 
-.small_form2 .label { float:left; width:150px; padding:4px 0 0 0; }
-.small_form2 .textbox { width:300px; float:left; }
+.small_form2 .label { float:left; width:120px; padding:4px 0 0 0; }
+.small_form2 .textbox { width:400px; float:left; }
 .small_form2 .field_body { width:300px; }
-.small_form2 .info { width:300px; float:left; margin-left:40px; }
+.small_form2 .info { width:200px; float:left; margin-left:40px; }
 
 #top{
   background:#808880;
@@ -171,7 +171,7 @@ border:solid 1px #e0e0e0;
 }
 .table_list_tool span{
 	margin-right: 20px;
-line-height: 28px;
+    line-height: 28px;
 	height: 28px;
 }
 .manage_div{
@@ -179,8 +179,22 @@ line-height: 28px;
     width:62%;
 }
 
-.manage_div .checkbox-span{
+.manage_div .tag-list{
+	background: #e0eee0;
+    margin-top: 6px;
+    padding:6px;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+    float:left;
+}
+
+.manage_div .tag-list .checkbox-span{
 	margin-left:12px;
+    white-space:nowrap;
+    word-break:keep-all;
+    padding:2px;
+    float:left;
 }
 
 .manage_div .manage_div_tool{
@@ -214,14 +228,7 @@ line-height: 28px;
     margin:12px 0 12px 0;
 }
 
-.tag-list{
-	background: #e0eee0;
-    margin-top: 6px;
-    padding:6px 0 6px 0;
-  -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
-}
+
 
 .markup{
 	padding:2px 4px 2px 4px;
@@ -233,8 +240,60 @@ line-height: 28px;
           border-radius: 3px;
 }
 
+#advande-setting{
+	cursor: pointer;
+    margin-bottom: 10px;
+    color: red;
+    font-weight: bold;
+}
 
-/*Í¼±ê*/
+.form-field{
+	margin-right: 40px;
+}
+.narrator{
+	color:#aaa;
+    font-size:10px;
+    font-weight: normal;
+}
+.title-right{
+    float:right;
+    font-size:13px;
+    height:38px;
+    min-height: 38px;
+    line-height: 38px;
+    margin-right: 12px;
+    color:#fff;
+}
+
+.title-right span{
+    margin-right: 6px;
+}
+.title-right span a{
+    color:#CCCCFF;
+}
+.multiline{
+    text-align:left;
+    display: block;
+    line-height: 26px;
+}
+
+.setting-hander-info {
+    padding:4px;
+    text-align: center;
+    font-size: 14px;
+    width:80%;
+    margin:12px auto;
+    color:#006633;
+    background: #b0ccb0;
+    border:1px dashed #000;
+}
+
+.setting-hander-info .error {
+    background: #FFCCCC;
+}
+
+
+/*å›¾æ ‡*/
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;
@@ -823,21 +882,7 @@ i{
 .button{
 	padding:2px 2px 2px 2px;
 }
-#advande-setting{
-	cursor: pointer;
-    margin-bottom: 10px;
-    color: red;
-    font-weight: bold;
-}
 
-.form-field{
-	margin-right: 40px;
-}
-.narrator{
-	color:#aaa;
-    font-size:10px;
-    font-weight: normal;
-}
 
 
 

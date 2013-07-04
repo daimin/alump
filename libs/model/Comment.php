@@ -1,8 +1,6 @@
 <?php
 class ALump_Comment extends ALump_Model {
 	
-	
-	
 	function __construct($row){
 		parent::__construct($row);
 		$this->id = $this->get('id');

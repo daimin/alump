@@ -17,7 +17,7 @@ class ALump_Options{
 		$options = $db->fetch_array();
 		
 		foreach($options as $op){
-			
+            if(empty($op['name'])) continue;
 			$this->$op['name'] = $op['value'];
 		}
 		
@@ -111,7 +111,7 @@ class ALump_Options{
 	private function _adminUrl()
 	{
 		$this->adminUrl = ALump_Common::url(defined('__ADMIN_DIR__') ?
-				__ADMIN_DIR__ : '/admin/', $this->siteUrl);
+				__ADMIN_DIR__ : '/admin/', $this->siteDir());
 	}
 	
 	private function _siteUrl()
@@ -145,6 +145,14 @@ class ALump_Options{
 				$this->logoUrl = $json_obj->logoUrl;
 			}
 		}
+        
+        $timezone = timezone_name_from_abbr("", $this->timezone, 0);
+    
+        if(empty($timezone)){
+            date_default_timezone_set('Asia/Shanghai');
+        }else{
+            date_default_timezone_set($timezone);
+        }
 	}
 	
 	public function adminUrl($path=""){

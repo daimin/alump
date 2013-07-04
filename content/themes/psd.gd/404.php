@@ -4,7 +4,7 @@
         <div class="post">
             <h2 class="entry_title">404 - <?php _e('页面没找到'); ?></h2>
             <p>
-            <form id="search" method="get" action="<?php $this->searchAction() ?>">
+                  <form id="search" method="get" action="<?php $this->searchAction() ?>">
 		<div><input type="text" name="s" class="text" size="20" /> <input type="submit" class="submit" value="<?php _e('搜索'); ?>" /></div>
     </form>
             </p>

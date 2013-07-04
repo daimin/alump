@@ -120,17 +120,24 @@ class ALump_Array {
   </span>';
 	}
 	
-	private function _listChildComments($commentId){
+	private function _listChildComments($commentId, $level){
 		$ress = array();
 		$childComments = ALump_Comment::getChildComments($commentId);
-		
+        $listLevelClass = 'comment-level-odd';
+        
+		if($level % 2 == 0) {
+            $listLevelClass = 'comment-level-even';  
+        }
+        $level++;
+        $count = 1;
 		if($childComments->have()){
 			array_push($ress, '<div class="comment-children">');
 			array_push($ress, '<ol class="comment-list">');
 			
 			while($comment = $childComments->next()){
-				
-				array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-child comment-level-odd comment-odd comment-by-author">');
+				if($count % 2 == 0) $listLevelClass = $listLevelClass." comment-even ";
+                else $listLevelClass = $listLevelClass." comment-odd ";
+				array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-child '.$listLevelClass.' comment-by-author">');
 				array_push($ress, '<div class="comment-author">');
 				array_push($ress, '<img class="avatar" src="'.ALump_Common::showGravatar($comment->mail).'" alt="'.$comment->author.'" width="32" height="32">');
 				array_push($ress, '<cite class="fn"><a href="'.$comment->url.'" rel="external nofollow">'.$comment->author.'</a></cite>');
@@ -139,18 +146,18 @@ class ALump_Array {
 				array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'#comment-'.$comment->id.'">'.ALump_date::format($comment->created, Alump::$options->commentDateFormat).'</a>');
 				array_push($ress, '</div>');
 				array_push($ress, '<p>'.$comment->content.'</p>');
-				array_push($ress, $this->_listChildComments($comment->id));
+				array_push($ress, $this->_listChildComments($comment->id, $level));
 				array_push($ress, '<div class="comment-reply">');
 				array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'?replyTo='.$comment->id.'#respond-'.$comment->type.'-'.$comment->post_id.'" rel="nofollow" onclick="return ALumpComment.reply(\'comment-'.$comment->id.'\', '.$comment->id.');">回复</a>');
 				array_push($ress, '</div>');
 				array_push($ress, '</li>');
+                $count++;
 			}
 			
-			array_push($ress, '</li>');
 			array_push($ress, '</ol>');
 			array_push($ress, '</div>');
 			
-			return implode("", $ress);
+			return implode("\n", $ress);
 		}
 		
 	}
@@ -160,10 +167,15 @@ class ALump_Array {
 		$ress = array();
 		array_push($ress, '<ol class="comment-list">');
 
-		
+        $count = 1;		
+        $commentCls = 'comment-odd';
 		foreach($this->data as $comment){
-			
-			array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-parent comment-odd">');
+			if($count % 2 == 0){
+                $commentCls = 'comment-even';
+            }else{
+                $commentCls = 'comment-odd';
+            }
+			array_push($ress, '<li id="comment-'.$comment->id.'" class="comment-body comment-parent '.$commentCls.'">');
 			array_push($ress, '<div class="comment-author">');
 			array_push($ress, '<img class="avatar" src="'.ALump_Common::showGravatar($comment->mail).'" alt="'.$comment->author.'" width="32" height="32">');
 			array_push($ress, '<cite class="fn"><a href="'.$comment->url.'" rel="external nofollow">'.$comment->author.'</a></cite>');
@@ -172,15 +184,17 @@ class ALump_Array {
 			array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'#comment-'.$comment->id.'">'.ALump_date::format($comment->created, Alump::$options->commentDateFormat).'</a>');
 			array_push($ress, '</div>');
 			array_push($ress, '<p>'.$comment->content.'</p>');
-			array_push($ress, $this->_listChildComments($comment->id));
+            $level = 1;
+			array_push($ress, $this->_listChildComments($comment->id, $level));
 			array_push($ress, '<div class="comment-reply">');
 			array_push($ress, '<a href="'.$this->_moduleUrl.'comment-page-'.$this->pageNav->pageno.'?replyTo='.$comment->id.'#respond-'.$comment->type.'-'.$comment->post_id.'" rel="nofollow" onclick="return ALumpComment.reply(\'comment-'.$comment->id.'\', '.$comment->id.');">回复</a>');
 			array_push($ress, '</div>');
 			array_push($ress, '</li>');
+            $count++;
 		}
 		array_push($ress, '</ol>');
 		
-		echo implode("", $ress);
+		echo implode("\n", $ress);
 	}
 	
 

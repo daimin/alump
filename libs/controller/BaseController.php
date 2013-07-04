@@ -21,9 +21,14 @@ class Alump_BaseController {
 	protected $_curPost  = null;
 	
 	protected $_archiveTitle = null;
-	
-	
-	public function __construct(){
+    
+    protected $_pageno_mark = "";
+    
+
+
+
+
+    public function __construct(){
 		$this->_themeForm = new ALump_ThemeForm();
 		$this->options = ALump::$options;
 		$this->getModuleUrl();
@@ -70,7 +75,7 @@ class Alump_BaseController {
 		}
 
 		$keys = array_keys ( $comment );
-		ALump_Logger::log($keys);
+		
 		foreach($keys as $key){
 			$this->_remembers[$key] = $comment[$key];
 		}
@@ -116,6 +121,7 @@ class Alump_BaseController {
 		$nickname = "";
 		$created = time();
 		$ip = ALump_Common::getClientIp();
+
 		// 首先验证下是否可评
 		if(!ALump_Comment::canComment($ip)){
 			$this->_toCommentsUrl("对不起, 您的发言过于频繁, 请稍侯再次发布.");
@@ -129,7 +135,7 @@ class Alump_BaseController {
 		if(empty($author)){ //没有填写作者，就取当前用户
 			$userName = ALump_Common::loginUser();
 			if(!empty($userName)){
-				$logUser = ALump_User::getUserByName(ALump_Common::loginUser());
+				$logUser = ALump_User::getUserByName(ALump_Common::loginUser());       
 				if(!empty($logUser)){
 					$author = $logUser->name;
 					$mail = $logUser->mail;
@@ -143,7 +149,7 @@ class Alump_BaseController {
 			$nickname = $author;
 		}
 		
-		if(empty($author) || empty($mail) || empty($url)){
+		if(empty($author) || empty($mail)){
 			return;
 		}
 		
@@ -189,6 +195,10 @@ class Alump_BaseController {
 		include ALump_Common::getTheme($script);
 	}
 	
+	public function say404(){
+        $this->view("404.php");
+		exit();
+	}
 	
 	
 	public function view($scriptName){
@@ -201,6 +211,7 @@ class Alump_BaseController {
 		$calss = explode("_", $basename);
 		
 		if(empty($mname)){
+		
 			$mname = "index";
 		}
 		
@@ -225,25 +236,27 @@ class Alump_BaseController {
 	 */
 	public function archiveTitle($cross, $p2, $sp){
 		//' &raquo; ', '', ' - '
+        $this->_archiveTitle = ALump_Common::trimArray($this->_archiveTitle);
 		if(!empty($this->_archiveTitle)){
 			echo implode($cross.$p2, $this->_archiveTitle).$p2.$sp.$p2;
 			
 		}
 		
 	}
+    
 	
 	public function header(){
 		echo '
-		<meta name="description" content="'.$this->options->description.'" />
-		<meta name="keywords" content="'.$this->options->keywords.'" />
-		<meta name="generator" content="'.ALump_Common::$VERSION_INFO.'" />
-		<meta name="template" content="'.$this->options->theme.'" />
-		<link rel="pingback" href="'.ALump_Common::url("/action/xmlrpc", $this->options->siteUrl).'" />
-		<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.ALump_Common::url("/action/xmlrpc?rsd", $this->options->siteUrl).'" />
-		<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="'.ALump_Common::url("/action/xmlrpc?wlw", $this->options->siteUrl).'" />
-		<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.ALump_Common::url("/feed/", $this->options->siteUrl).'" />
-		<link rel="alternate" type="application/rdf+xml" title="RSS 1.0" href="'.ALump_Common::url("/feed/rss/", $this->options->siteUrl).'" />
-		<link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="'.ALump_Common::url("/feed/atom/", $this->options->siteUrl).'" />';
+<meta name="description" content="'.$this->options->description.'" />
+<meta name="keywords" content="'.$this->options->keywords.'" />
+<meta name="generator" content="'.ALump_Common::$VERSION_INFO.'" />
+<meta name="template" content="'.$this->options->theme.'" />
+<link rel="pingback" href="'.ALump_Common::url("/action/xmlrpc", $this->options->siteUrl).'" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.ALump_Common::url("/action/xmlrpc?rsd", $this->options->siteUrl).'" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="'.ALump_Common::url("/action/xmlrpc?wlw", $this->options->siteUrl).'" />
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.ALump_Common::url("/feed/", $this->options->siteUrl).'" />
+<link rel="alternate" type="application/rdf+xml" title="RSS 1.0" href="'.ALump_Common::url("/feed/rss/", $this->options->siteUrl).'" />
+<link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="'.ALump_Common::url("/feed/atom/", $this->options->siteUrl).'" />';
 		
 		if(strpos($this->_moduleUrl,'page/') !== False || strpos($this->_moduleUrl,'post/') !== False){
 			ALump_Javascript::replyCommentJS($this->_curPost->type, $this->_curPost->id);
@@ -254,6 +267,11 @@ class Alump_BaseController {
 	public function footer(){
 		
 		
+	}
+	
+	
+	public function searchAction(){
+		echo ALump_Common::url('/search/', $this->options->siteUrl);
 	}
 	
 	public function respondId($echod = True){
@@ -292,6 +310,10 @@ class Alump_BaseController {
 		     </div>';
 	
 	}
+    
+    protected function setPagenoMark($mark=''){
+        $this->_pageno_mark = $mark;
+    }
 	
 	public function _getPageNavUrl($pageNav, $pageno, $isComment){
 		if($pageno <= 0){
@@ -306,7 +328,7 @@ class Alump_BaseController {
 			$urlTail = "#comments";
 		}
 		
-		return ALump_Common::url('/'.$this->_moduleUrl.'/'.$this->_pagePrifix . $pageno.$urlTail, $this->options->siteUrl);
+		return ALump_Common::url('/'.$this->_moduleUrl.'/'.$this->_pagePrifix . $this->_pageno_mark.$pageno.$urlTail, $this->options->siteUrl);
 	}
 	
 	protected  function _pageNav($prev = '&laquo;', $next = '&raquo;', $splitPage = 3, $splitWord = '...', $pageno){		

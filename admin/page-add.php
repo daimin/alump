@@ -27,8 +27,19 @@
     <textarea id="post-content" name="content" cols="110" rows="25" ></textarea>
   </td>
   </tr>
-
+<tr>
+          <td colspan="4">
+        <span class="form-field">选择分类：<select name="category"  ><?php 
+     ALump::Lump("Metas_Category_List_Admin")->to($categorys);
+     ?>
+     <?php while($category = $categorys->next()):?>
+     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
+     <?php endwhile?>
+     </select></span> 
+        </td>
+</tr>
    <tr>
+  
      <td>
      <span class="form-field"> 时间：<input type="text" name="created" id="created" value="<?php echo Alump_Date::getNow()?>" />&nbsp;&nbsp;<span class="narrator">请选择一个发布日期</span></span> 
       </td>

@@ -22,6 +22,7 @@ abstract class ALump_Model {
    	          return $this->$name;
    	       }
    	  }else if (isset($this->$name)){
+		 
    	      return $this->$name;
    	  }
    	  
@@ -47,11 +48,16 @@ abstract class ALump_Model {
    	 
    }
    
-   public function selected($fname1, $fname2){
+   public function selected($fname1, $fname2, $ctxObj = False){
+       
    	   if(isset($this->$fname1) && !empty($this->$fname1)){
 	   	   	if($this->$fname1  == ALump::$request->request($fname2)){
 	   	   		echo ' selected="selected" ';
-	   	   	}
+	   	   	}else if(!empty($ctxObj)){
+                if($this->$fname1  == $ctxObj->category()->$fname1){
+                     echo ' selected="selected" ';
+                 }
+            }
    	   }
    	   
    }

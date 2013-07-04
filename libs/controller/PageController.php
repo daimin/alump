@@ -11,12 +11,19 @@ class ALump_PageController extends Alump_BaseController {
 		parent::__construct();
 	}
 	
-	public  function p($slug, $action = False){
-		
+	public  function p($slug=False, $action = False){
+		if(empty($slug)){
+		    $this->say404();
+		}
 		$commable = false;
 	   
 		$this->getModuleUrl('p/'.$slug.$this->options->suffix, 'comment-page-');
+		
 		$this->_curPost = ALump_Post::getPageBySlug($slug);
+        ALump_Post::updateViewCount($this->_curPost);
+		if(empty($this->_curPost->id)){
+		    $this->say404();
+		}
 		if($action == "comment"){
 			$this->doComment($this->_curPost->id);
 		}else if(strpos($action, 'comment-page-') !== False){
@@ -32,6 +39,16 @@ class ALump_PageController extends Alump_BaseController {
 		$this->_curPost->permalink();
 		
 	}
+    
+    public function category(){
+		$category = $this->_curPost->category();
+		if(!empty($category)){
+			$permalink = $category->getPermalink();
+			echo '<a href="'.$permalink.'">'.$category->name.'</a>';
+		}
+		
+	}
+    
 	
 	public function title(){
 		$this->_curPost->title();

@@ -92,7 +92,8 @@ EOT;
 	public static function showMaskDiv($msg, $tarurl){
 		$siteDir = ALump::$options->siteDir();
 		echo <<<EOT
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -103,7 +104,7 @@ EOT;
 <body>
 <script type="text/javascript">
 		//<![CDATA[
-	$(function(){
+	//$(function(){
 	    var box = new BlackBox();
 		box.alert("$msg", function () {
            window.location = "$tarurl";
@@ -111,7 +112,7 @@ EOT;
 	        title: '警告',
 	        value: '关闭'
 	    });
-	});
+	//});
 	
 		//]]>
 		</script>

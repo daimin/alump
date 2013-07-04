@@ -82,6 +82,22 @@ function getPageValue($isedit=false){
 	return $page;
 }
 
+function updateMetas($postid){
+	if(!empty($postid)){
+		$category = ALump::$request->post('category');
+		$tags = ALump::$request->post('tags');
+		
+		// 保存类别
+		$categoryObj = ALump_Meta::getMetaBySlug($category);
+	    ALump_Relation::removeByPostId($postid);
+		Alump_Relation::save(new ALump_Relation(array(
+		"post_id"=>$postid,
+		"meta_id"=>$categoryObj->id,
+		)));
+	
+	}
+}
+
 
 function updateSlug($postid){
 	$slug = ALump_Common::escape(ALump::$request->post('slug'));
@@ -106,8 +122,10 @@ if($action == 'page_add'){
 	$pageid = Alump_Post::save($page);
 	
 	updateSlug($pageid);
+    
+	updateMetas($pageid);
 	
-	updateAttachs($pageid);
+    updateAttachs($pageid);
 	
 	doRedirect($page);
 	
@@ -122,6 +140,8 @@ if($action == "page_edit"){
 	$pageid = ALump::$request->post('id');
 	
 	updateSlug($pageid);
+    
+    updateMetas($pageid);
 
 	updateAttachs($pageid);
 	

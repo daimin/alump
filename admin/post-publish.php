@@ -58,11 +58,11 @@
         <div class="row_tool">
           <a class="link_button" href="post-edit.php?id=<?php echo $post->id?>">编辑</a>
           <a class="link_button" href="javascript:void(0)" onclick="remove_post('<?php echo $post->id?>')">删除</a>
-                    <a class="link_button" href="/?post/551paq" target="_blank">查看</a>
+                    <a class="link_button" href="<?php $post->permalink()?>" target="_blank">查看</a>
         </div>
       </td>
       <td class="td-list"><?php echo $post->author()->name?></td>
-      <td class="td-list"><?php echo $post->category()->name?></td>
+      <td class="td-list"><?php $post->category(True)?></td>
       <td class="td-list"><?php echo ALump_Date::format($post->created, "Y-m-d")?></td>
       <td class="td-list"><?php echo $post->view_count?></td>
       <td class="td-list"><?php echo $post->comment_count?></td>

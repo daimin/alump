@@ -10,13 +10,19 @@ class ALump_PostController extends Alump_BaseController {
 	function __construct(){
 		parent::__construct();
 	}
+        
+    function index($slug=False, $action = False){
+        $this->t($slug, $action);
+    }
 	
 	public  function t($slug, $action = False){
 		
 		$commable = false;
-	   
+	  
 		$this->getModuleUrl('t/'.$slug.$this->options->suffix, 'comment-page-');
 		$this->_curPost = ALump_Post::getPostBySlug($slug);
+        
+        ALump_Post::updateViewCount($this->_curPost);
 		if($action == "comment"){
 			$this->doComment($this->_curPost->id);
 		}else if(strpos($action, 'comment-page-') !== False){

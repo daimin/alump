@@ -57,6 +57,12 @@ class ALump_User extends ALump_Model {
 		$db = ALump_Db::getInstance();
 		$db->select(ALump_Common::getTabName("users"), null, array('where' => " name='$name'"));
 		$user = new ALump_User($db->fetch_one());
+        if(empty($user->mail)){
+            $user->mail = "admin@admin.com";
+        }
+        if(empty($user->url)){
+            $user->url = "http://xiaolan.tk";
+        }
 		return $user;
 	
 	}

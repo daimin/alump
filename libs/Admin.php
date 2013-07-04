@@ -16,6 +16,8 @@ class ALump_Admin {
 			"page-add.php"  => "创建新页面",
 			"page-edit.php"  => "编辑页面",
 			"page-manage.php"  => "管理页面",
+            "profile.php"  => "个人设置",
+            "site-setting.php"  => "站点设置",
 	);
 	/**
 	 * 后台页面专用的页面大小

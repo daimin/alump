@@ -27,6 +27,14 @@ function _e($str){
 	echo $str;
 }
 
+function isNotEmpty($val){
+    if(!empty($val)){
+        return True;
+    }
+
+    return False;
+}
+
 
 
 class ALump_Common{
@@ -402,6 +410,7 @@ class ALump_Common{
 		}
 	}
 
+
 	
 	public static function javascript($script){
 		header("Content-type:text/html");
@@ -472,5 +481,15 @@ echo <<<EOT
 EOT;
 		exit;
 	}
+    
+   
+    public static function trimArray($arr){
+        if(is_array($arr)){
+            return array_filter($arr, 'isNotEmpty');
+        }else{
+            return $arr;
+        }
+        
+    }
 }
 ?>

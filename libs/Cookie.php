@@ -1,6 +1,7 @@
 <?php
-class ALump_Cookie
-{
+
+class ALump_Cookie {
+
     /**
      * 获取指定的COOKIE值
      *
@@ -9,12 +10,12 @@ class ALump_Cookie
      * @param string $default 默认的参数
      * @return mixed
      */
-    public static function get($key, $default = NULL)
-    {
+    public static function get($key, $default = NULL) {
         $val = isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
-        if(empty($val)){
-        	return false;
+        if (empty($val)) {
+            return false;
         }
+
 
         return ALump_Common::decrypt($val);
     }
@@ -29,8 +30,7 @@ class ALump_Cookie
      * @param string $url 路径(可以是域名,也可以是地址)
      * @return void
      */
-    public static function set($key, $value, $expire = 0, $url = NULL)
-    {
+    public static function set($key, $value, $expire = 0, $url = NULL) {
         $path = '/';
         if (!empty($url)) {
             $parsed = parse_url($url);
@@ -42,7 +42,7 @@ class ALump_Cookie
         /** 对数组型COOKIE的写入支持 */
         if (is_array($value)) {
             foreach ($value as $name => $val) {
-            	$val = ALump_Common::encrypt($val);
+                $val = ALump_Common::encrypt($val);
                 setcookie("{$key}[{$name}]", $val, $expire, $path);
             }
         } else {
@@ -57,8 +57,7 @@ class ALump_Cookie
      * @param string $key 指定的参数
      * @return void
      */
-    public static function delete($key, $url = NULL)
-    {
+    public static function delete($key, $url = NULL) {
         if (!isset($_COOKIE[$key])) {
             return;
         }
@@ -80,4 +79,5 @@ class ALump_Cookie
             setcookie($key, '', time() - 604800, $path);
         }
     }
+
 }

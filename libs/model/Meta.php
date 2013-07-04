@@ -11,7 +11,6 @@ class ALump_Meta extends ALump_Model {
 	public $slug = "";
 	public $type = "tag";
 	public $description = "";
-	public $count = 0;
 	public $order = 0;
 	
 	function __construct($row){
@@ -21,7 +20,6 @@ class ALump_Meta extends ALump_Model {
 		$this->slug = $this->get('slug');
 		$this->type = $this->get('type');
 		$this->description = $this->get('description');
-		$this->count = $this->get('count');
 		$this->order = $this->get('order');
 	}
 	
@@ -35,24 +33,44 @@ class ALump_Meta extends ALump_Model {
 		$tags = explode(",", $tagstr);
 		
 		foreach($tags as $tag){
-			$tag = new Alump_Meta(array(
+            $tag_id = False;
+            $oldTag = self::getMetaByName($tag);
+            
+            if(!$oldTag){
+                $tag_id = $oldTag->id;
+            }else{
+                $tag = new Alump_Meta(array(
 					"name" => $tag,
 					"slug" => $tag,
 					"type" => "tag",
 					));
+            
+                $tag_id = self::save($tag);
+                // 更新slug，如果Tag的名称和slug一样的话
+                if($tag->name == $tag->slug){
+                    $tag->slug = $tag_id;
+                    $tag->id = $tag_id;
+                    self::update($tag);
+                }
+            }
 			
-			array_push($tagId, self::save($tag));
+            if(!empty($tag_id)){
+                array_push($tagId, $tag_id);
+            }
+			
 		}
 		
 		return $tagId;
 	}
 	
 	public static function composeTags($tags){
+        
 		if(empty($tags)){
 			return "";
 		}
 		$tagNames = array();
-		foreach($tags->data as $tag){
+        
+		foreach($tags->items() as $tag){
 			array_push($tagNames, $tag->name);
 		}
 		
@@ -73,8 +91,8 @@ class ALump_Meta extends ALump_Model {
 		$db = ALump_Db::getInstance();
 		$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='$type' and `name`='$name'"));
 		$res = $db->fetch_one();
-		if(!$res) return $res;
-		return new ALump_Meta($db->fetch_one());
+		if(empty($res)) return False;
+		return new ALump_Meta($res);
 	
 	}
 	
@@ -89,20 +107,26 @@ class ALump_Meta extends ALump_Model {
 	 * 获取所有的分类
 	 * @return ALump_Array
 	 */
-	public static function getCategorys($postsListSize = False){
+	public static function getCategorys($postsListSize = False, $status= 1){
 		$db = ALump_Db::getInstance();
 		if(empty($postsListSize)){
 			$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='category'","order"=>"`order` asc"));
 		}else{
-			$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='category'", "order"=>"`count` desc limit 0, $postsListSize"));
+            $tarTabMeta = ALump_Common::getTabName("metas");
+            $tarTabRel = ALump_Common::getTabName("relation");
+			$db->query("SELECT a.id, a.name,a.slug,b.pcount FROM (SELECT id, `name`,`slug` FROM `$tarTabMeta` WHERE `type`='category') 
+                       AS  a LEFT JOIN (SELECT COUNT(post_id) AS pcount,meta_id FROM `$tarTabRel` GROUP BY meta_id )b ON b.meta_id = a.id ORDER BY b.pcount DESC");
 		}
+		
 		
 		$rows = $db->fetch_array();
 		$categorys = new ALump_Array();
 		
 		foreach($rows as $row){
 			$cate = new ALump_Meta($row);
-			
+			if($status == ALump_Common::$PUBLISH){
+		        $cate->count = ALump_Relation::getCountPostByMeta($cate->id);
+		    }
 			$categorys->add($cate);
 		}
 	
@@ -215,6 +239,7 @@ class ALump_Meta extends ALump_Model {
 	 * 更新meta下的文章数
 	 * @param unknown_type $metaId
 	 */
+    /*
 	public static function updateCount($metaId){
 		$db = ALump_Db::getInstance();
 		if(empty($metaId)){
@@ -225,7 +250,7 @@ class ALump_Meta extends ALump_Model {
 			$tarTab = ALump_Common::getTabName("metas");
 			$db->query("update $tarTab set `count`=`count`+1 where `id`='$metaId'");
 		}
-	}
+	}*/
 	
 	/**
 	 * 获得最大的排序号
@@ -263,7 +288,9 @@ class ALump_Meta extends ALump_Model {
 	
 		if(!empty($insql)){
 			$insql = '('.implode(",", $insql).')';
-		}
+		}else{
+            return False;
+        }
 		
 		$db = ALump_Db::getInstance();
 		$db->select(ALump_Common::getTabName("metas"), null, array("where"=>"`type`='$type' and `id` in $insql"));
@@ -296,9 +323,9 @@ class ALump_Meta extends ALump_Model {
 	
 	public function getPermalink(){
 		if($this->type == "category"){
-			$this->permalink = ALump::$options->siteUrl("/category/".$this->slug, False).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/category/".$this->slug, False).'/';
 		}else if($this->type == "tag"){
-			$this->permalink = ALump::$options->siteUrl("/tag/".$this->slug, False).ALump::$options->suffix;
+			$this->permalink = ALump::$options->siteUrl("/tag/".$this->slug, False).'/';
 		}
 		
 		return $this->permalink;

@@ -92,24 +92,21 @@ function updateMetas($postid){
 		
 		// 保存类别
 		$categoryObj = ALump_Meta::getMetaBySlug($category);
-	
+	    ALump_Relation::removeByPostId($postid);
 		Alump_Relation::save(new ALump_Relation(array(
-		"post_id"=>$postid,
-		"meta_id"=>$categoryObj->id,
+            "post_id"=>$postid,
+            "meta_id"=>$categoryObj->id,
 		)));
 		
-		ALump_Meta::updateCount($categoryObj->id);
-	
 		// 保存TAG
 		$tagids = Alump_Meta::splitTag($tags);
-	
+
 		if(!empty($tagids)){
 			foreach($tagids as $tagid){
 				Alump_Relation::save(new ALump_Relation(array(
 				"post_id"=>$postid,
 				"meta_id"=>$tagid,
 				)));
-				ALump_Meta::updateCount($tagid);
 			}
 		}
 	
@@ -176,8 +173,7 @@ if($action == "post_edit"){
 	updateMetas($postid);
 	
 	updateAttachs($postid);
-	
-	
+
 	doRedirect($post);
 }
 

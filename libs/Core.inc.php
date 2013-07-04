@@ -1,6 +1,6 @@
 <?php
 
-date_default_timezone_set('Asia/Shanghai');
+
 
 
 include __ROOT_DIR__.'/libs/ALump.php';

@@ -35,12 +35,13 @@ ALump::Lump("Content_Post_Edit_Admin")->to($post);
     </td>
   </tr>
    <tr>
-  <td >
+  <td>
      <span class="form-field">选择分类：<select name="category"  ><?php 
      ALump::Lump("Metas_Category_List")->to($categorys);
      ?>
+     
      <?php while($category = $categorys->next()):?>
-     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
+     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category", $post)?>><?php echo $category->name ?></option>
      <?php endwhile?>
      </select></span> 
      </td>

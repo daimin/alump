@@ -30,12 +30,10 @@
   <thead>
     <tr>
     <td style="width:30px"><input type="checkbox" name="ids" onclick="if(this.checked==true) { check_all('ids'); } else { clear_all('ids'); }" value=""/></td>
-    <td style="width:50%">标题</td>
+    <td style="width:65%">标题</td>
     <td class="td-title" style="width:10%">作者</td>
     <td class="td-title" style="width:10%">分类</td>
     <td class="td-title" style="width:10%">日期</td>
-    <td class="td-title" style="width:8%">查看</td>
-    <td class="td-title" style="width:8%">评论</td>
     </tr>
   </thead>
   <tbody>
@@ -54,13 +52,11 @@
       <td class="td-list"><?php echo $post->author()->name?></td>
       <td class="td-list"><?php echo $post->category()->name?></td>
       <td class="td-list"><?php echo ALump_Date::format($post->created, "Y-m-d")?></td>
-      <td class="td-list"><?php echo $post->view_count?></td>
-      <td class="td-list"><?php echo $post->comment_count?></td>
     </tr>
     <?php }?>
     <?php }else{?>
     <tr class="even">
-        <td colspan="7" class="td-list"><h4><?php echo '没有任何页面'; ?></h4></td>
+        <td colspan="5" class="td-list"><h4><?php echo '没有任何页面'; ?></h4></td>
     </tr>
     <?php }?>
     </tbody>
@@ -71,8 +67,6 @@
     <td class="td-title">作者</td>
     <td class="td-title">分类</td>
     <td class="td-title">日期</td>
-    <td class="td-title">查看</td>
-    <td class="td-title">评论</td>
     </tr>
   </tfoot>
 </table>

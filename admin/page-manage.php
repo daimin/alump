@@ -25,8 +25,9 @@
   <thead>
     <tr>
     <td style="width:30px"><input type="checkbox" name="ids" onclick="if(this.checked==true) { check_all('ids'); } else { clear_all('ids'); }" value=""/></td>
-    <td style="width:60%">标题</td>
+    <td style="width:50%">标题</td>
     <td class="td-title" style="width:10%">作者</td>
+    <td class="td-title" style="width:10%">类别</td>
     <td class="td-title" style="width:10%">日期</td>
     <td class="td-title" style="width:8%">查看</td>
     <td class="td-title" style="width:8%">评论</td>
@@ -40,8 +41,14 @@
       <td><input type="checkbox" name="ids" value="<?php echo $post->id?>"/></td>
       <td>
         <a class="row_name" href="page-edit.php?id=<?php echo $post->id?>"><?php echo $post->title?><?php $post->onDraft('<span class="markup">草稿</span>')?></a>
+        <div class="row_tool">
+          <a class="link_button" href="page-edit.php?id=<?php echo $post->id?>">编辑</a>
+          <a class="link_button" href="javascript:void(0)" onclick="remove_post('<?php echo $post->id?>')">删除</a>
+                    <a class="link_button" href="<?php $post->permalink()?>" target="_blank">查看</a>
+        </div>
       </td>
       <td class="td-list"><?php echo $post->author()->name?></td>
+      <td class="td-list"><?php $post->category(True)?></td>
       <td class="td-list"><?php echo ALump_Date::format($post->created, "Y-m-d")?></td>
       <td class="td-list"><?php echo $post->view_count?></td>
       <td class="td-list"><?php echo $post->comment_count?></td>
@@ -58,6 +65,7 @@
     <td><input type="checkbox" name="ids" onclick="if(this.checked==true) { check_all('ids'); } else { clear_all('ids'); }" value=""/></td>
     <td>标题</td>
     <td class="td-title">作者</td>
+    <td class="td-title">类别</td>
     <td class="td-title">日期</td>
     <td class="td-title">查看</td>
     <td class="td-title">评论</td>
