@@ -26,6 +26,12 @@
     </div>
     <div class="clear"></div>
     <div class="field">
+      <div class="label">网站URL地址</div>
+      <input class="textbox" type="text" name="siteUrl" value="<?php echo trimSiteUrl(ALump::$options->siteUrl)?>">
+      <div class="info">例如:http://www.phpblog.cn</div>
+    </div>
+    <div class="clear"></div>
+    <div class="field">
       <div class="label">时区</div>
      <select class="textbox" name="timezone" id="timezone-0-5">
         <option value="0">
@@ -134,9 +140,20 @@
        <input  type="radio" id="suffix_aspx" name="site_suffix" value=".aspx">
        <label for="site_rewrite_no">aspx</label>
       </div>
-      <div class="info">给独立页面设置一种文件后缀名, 使得它看起来像<br/>
-http://localhost/alump/example.html</div>
+      <div class="info">给独立页面设置一种文件后缀名, 使得它看起来像其它语言开发的一样.</div>
     </div>
+     <div class="field">
+      <div class="label">登陆时是否使用验证码</div>
+      <div class="textbox">
+      <input  type="radio" id="loginUseGD_yes" name="loginUseGD" value="1">
+       <label for="loginUseGD_yes">是</label>
+       <input  type="radio" id="loginUseGD_no" name="loginUseGD" value="0">
+      <label for="loginUseGD_no">否</label>
+      </div>
+      <div class="info">    
+只有在服务器支持GD时才可以开启.</div>
+    </div>
+	
     <div class="clear"></div>
     <div class="field">
       <div class="label"></div>
@@ -208,6 +225,15 @@ function rewriteChecked(){
     }
 }
 
+function loginUseDBChecked(){
+    var loginUseGD = '<?php echo ALump::$options->loginUseGD?>';
+    if(loginUseGD == 0){
+        _$("loginUseGD_no").checked = true;
+    }else{
+        _$("loginUseGD_yes").checked = true;
+    }
+}
+
 function suffixChecked(){
     var suffix = '<?php echo ALump::$options->suffix?>';
     if(suffix == '.html'){
@@ -230,6 +256,7 @@ window.onload = function(){
     handlerInfoInterval();
     rewriteChecked();
     suffixChecked();
+    loginUseDBChecked();
 
 };
 </script>

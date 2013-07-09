@@ -1,0 +1,1 @@
+[2013-07-05 06:00:27] Mysql执行错误: update `alump_users` set `visited` = '1373014827' where Array <br/>Unknown column 'Array' in 'where clause'

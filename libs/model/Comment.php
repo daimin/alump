@@ -123,8 +123,11 @@ class ALump_Comment extends ALump_Model {
 		
 	}
 	
-	public static function getCommentCount($postid){
+	public static function getCommentCount($postid=False){
 		$db = ALump_Db::getInstance();
+        if(empty($postid)){
+            return $db->count(ALump_Common::getTabName("comments"), 'id', array());
+        }
 		return $db->count(ALump_Common::getTabName("comments"), 'id', array("where"=>"`post_id`='$postid'"));
 	}
 	

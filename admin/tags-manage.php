@@ -28,7 +28,7 @@
 <form name="tag-form" method="post" onsubmit="return validate_addtag(this)">
 <input type="hidden" value="add-tag" name="action" />
 <input type="hidden" value="" name="cid" />
-<table class="form-tab form-100">
+<table class="form-tab form-100 tab-background">
 <tbody>
 <tr>
 <td class="form-field">标签名称*：</td><td><input type="text" name="cname" /></td>

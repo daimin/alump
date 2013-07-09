@@ -556,6 +556,11 @@ class ALump_Post extends ALump_Model {
 		   return $db->query("update $tarTab set `view_count`=`view_count`+1 where `id`='$post->id'");
         }
     }
+    
+    public static function getPostCount(){
+        $db = ALump_Db::getInstance();
+        return $db->count(ALump_Common::getTabName("posts"), 'id', array());
+    }
 	
 	
 // 	public static function addCommentNum($postid){

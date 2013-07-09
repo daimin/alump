@@ -1,125 +1,104 @@
 <?php include 'head.php' ?>
 <?php include 'menu.php'?>
 <?php include 'setting-handler.php'?>
-  <div id="content">
-     <?php setting_message()?>
+ <div id="content">
+      <?php setting_message()?>
     <div id="content_box">
-<form action="" method="post">
-    <input type="hidden" name="action" value="site" />
-    <div class="admin_page_name">个人设置</div>
-  <div class="small_form small_form2">
-    
-    <div class="clear"></div>
-    <div class="field">
-      <div class="label">关键字</div>
-      <input class="textbox" type="text" name="site_keyword" value="<?php echo ALump::$options->keywords?>">
-      <div class="info">请以半角逗号","分割多个关键字.</div>
-    </div>
-    <div class="field">
-      <div class="label"></div>
-      <div class="field_body"><input class="button" type="submit" name="save" value="保存设置"></div>
-      <div class="info"></div>
-    </div>
-    <div class="clear"></div>
-  </div>
-</form>
-    </div>
-    <div id="prefile-box">
-        <div class="field">
-            <div class="label">昵称</div>
-            <input class="textbox" type="text" name="site_name" value="<?php echo ALump::$options->title?>">
-          </div>
-          <div class="clear"></div>
-          <div class="field">
-            <div class="label">个人主页地址</div>
-            <textarea rows="5" class="textbox" name="site_desc"><?php echo ALump::$options->description?></textarea>
-            <div class="info">用简洁的文字没描述本站点。</div>
-          </div>
-    </div>
+<div class="admin_page_name">个人设置</div>
+
+<div class="manage_div" >
+<div class="setting-list">
+   <div class="brief">
+       <?php $logUser = getLoginUser(); ?>
+       <div class="profile-name"><span><?php echo $logUser->nickname ?></span> (<?php echo $logUser->name ?>) </div>
+       <div class="profile-info">
+          <div class="profile-info-text"> <?php printBrief($logUser) ?></div>
+          <div class="profile-info-img"><img src="<?php echo ALump_Common::showGravatar($logUser->mail, 48) ?>" /></div>
+       </div>
+   </div>
+   <div class="cpassword">
+       <div class="head">修改密码</div>
+       <?php cpasswordError() ?>
+       <form name="p-form" method="post">
+        <input type="hidden" value="change-password" name="action" />
+       <table class="form-tab form-100">
+        <tbody>
+        <tr>
+        <td class="form-field"><span class="label">旧密码：</span></td><td>
+            <input type="text" name="old_password" />
+            <div class="narrator">用户登录时使用的密码.</div>
+            <div class="clear"></div>
+        </td>
+        </tr>
+        <tr>
+        <td class="form-field"><span class="label">新密码：</span></td><td>
+            <input type="text" name="new_password" />
+            <div class="narrator">用户指定自己的新密码.<br/>建议使用特殊字符与字母的混编样式,以增加系统安全性.</div>
+            <div class="clear"></div>
+        </td>
+        </tr>
+        <tr>
+        <td class="form-field"><span class="label">密码确认：</span></td><td>
+            <input type="text" name="re_password" />
+            <div class="narrator">请确认你的密码, 与上面输入的密码保持一致.</div>
+            <div class="clear"></div>
+        </td>
+        </tr>
+        <tr>
+        <td colspan="2" align="right"><input type="submit" name="add-cate-btn" value=" 修改密码 " /></td>
+        </tr>
+        </tbody>
+        </table>
+       </form>
+   </div>
 </div>
+</div>
+<div class="form-div div-right side-right-div">
+<form name="p-form" method="post">
+<input type="hidden" value="update-profile" name="action" />
+<input type="hidden" value="" name="cid" />
+<table class="form-tab form-100 tab-background">
+<tbody>
+<tr>
+<td class="form-field"><div class="label">昵称：</div><input type="text"  size="28" name="nickname" value="<?php echo $logUser->nickname ?>"/>
+    <div class="narrator">用户昵称可以与用户名不同, 用于前台显示.如果你将此项留空,将默认使用用户名.</div></td>
+</tr>
+<tr>
+<td class="form-field"><div class="label">个人主页地址：</div><input type="text"  size="28" name="url"  value="<?php echo $logUser->url ?>"/>
+    <div class="narrator">此用户的个人主页地址, 请用http://开头.</div></td>
+</tr>
+<tr>
+<td class="form-field"><div class="label">电子邮箱地址*：</div><input type="text"  size="28" name="mail"  value="<?php echo $logUser->mail ?>"/>
+    <div class="narrator">电子邮箱地址将作为此用户的主要联系方式.
+请不要与系统中现有的电子邮箱地址重复.</div>
+<?php cprofileError() ?>
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right"><input type="submit" name="add-cate-btn" value=" 更新档案 " /></td>
+</tr>
+</tbody>
+</table>
+</form>
+</div>
+    </div>
+  </div>
 <script type="text/javascript">
-var _$ = function(id){return document.getElementById(id);};
-
-function attachmentTypesChecked(){
-    var attachmentTypes = '<?php echo ALump::$options->attachmentTypes?>';
-    attachmentTypes = attachmentTypes.split(",");
-    //@image@,@media@,@doc@,cpp,java
-    if(attachmentTypes && attachmentTypes.length > 0){
-        var elseat = [];
-         for(var i = 0, len = attachmentTypes.length;i < len; i++){
-             var at = attachmentTypes[i];
-             if(at == '@image@'){
-                 _$("@image@attachment").checked = true;
-             }else if(at == '@media@'){
-                 _$("@media@attachment").checked = true;
-             }else if(at == '@doc@'){
-                 _$("@doc@attachment").checked = true;
-             }else{
-                   elseat[elseat.length] =   at;
-             }
-         }
-         
-         if(elseat.length > 0){
-               _$("other@attachment").checked = true;
-               _$("otherAttachment").value = elseat.join(",");
-         }
-    }
-}
-
-function timezoneSelected(){
-    var timezoneBoxs = _$("timezone-0-5");
-    var options = timezoneBoxs.options;
-    var curTimezone = '<?php echo ALump::$options->timezone?>';
-    for(var i = 0, len = options.length; i < len;i++){
-        if(options[i].value == curTimezone){
-            options[i].selected = true;
-            break;
-        }
-    }
-}
-
-function handlerInfoInterval(){
-    var settingHanderInfo = document.getElementById("setting-hander-info");
-    if(settingHanderInfo){
-        window.setInterval(function(){
-            settingHanderInfo.parentNode.removeChild(settingHanderInfo);
+ function handlerInfoInterval(){
+    var settingHanderInfos = $(".setting-hander-info");
+    settingHanderInfos.each(function(){
+        (function(obj){
+            window.setInterval(function(){
+                $(obj).remove();
+            }, "4000");
             
-        }, "4000");
-    }
+        })(this);
+       
+    });
 }
 
-function rewriteChecked(){
-    var rewrite = '<?php echo ALump::$options->rewrite?>';
-    if(rewrite == 0){
-        _$("site_rewrite_no").checked = true;
-    }else{
-        _$("site_rewrite_yes").checked = true;
-    }
-}
-
-function suffixChecked(){
-    var suffix = '<?php echo ALump::$options->suffix?>';
-    if(suffix == '.html'){
-        _$("suffix_html").checked = true;
-    }else if(suffix == '.htm'){
-        _$("suffix_htm").checked = true;
-    }else if(suffix == '.php'){
-        _$("suffix_php").checked = true;
-    }else if(suffix == '.aspx'){
-        _$("suffix_aspx").checked = true;
-    }else if(suffix == '.jsp'){
-        _$("suffix_jsp").checked = true;
-    }else{
-        _$("suffix_0").checked = true;
-    }
-}
-window.onload = function(){
-    timezoneSelected();
-    attachmentTypesChecked();
+$(function(){
     handlerInfoInterval();
-    rewriteChecked();
-    suffixChecked();
-
-};
+});
 </script>
 <?php include 'foot.php'?>

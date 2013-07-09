@@ -48,6 +48,14 @@ abstract class ALump_Model {
    	 
    }
    
+   public static function query($sql){
+       $db = ALump_Db::getInstance();
+       if($db->query($sql)){
+           return $db->fetch_one();
+       }
+   }
+   
+   
    public function selected($fname1, $fname2, $ctxObj = False){
        
    	   if(isset($this->$fname1) && !empty($this->$fname1)){

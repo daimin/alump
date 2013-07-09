@@ -201,5 +201,20 @@ class ALump_Db {
 	public function affected_rows(){
 		return $this->mysqli->affected_rows;
 	}
+    
+    public function getConn(){
+        return $this->mysqli;
+    }
+    
+    public function getDbSize(){
+        $this->query("show table status from ".Alump_Db::$db_cfg ['database']);
+        $rows = $this->fetch_array();
+        $size = 0;
+        foreach($rows as $row){
+            $size += $row['Data_length'];
+        }
+        
+        return $size;
+    }
 }
 ?>

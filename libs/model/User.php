@@ -20,6 +20,8 @@ class ALump_User extends ALump_Model {
 		$this->password = $this->get('password');
 		$this->mail = $this->get('mail');
 		$this->url = $this->get('url');
+        $this->created = $this->get('created');
+        $this->visited = $this->get('visited');
 		$this->nickname = $this->get('nickname');
 		$this->group = $this->get('group');
 	}
@@ -31,6 +33,7 @@ class ALump_User extends ALump_Model {
 	public $url = "";
 	public $nickname = "";
 	public $created = "";
+    public $visited = "";
 	public $group = "editor";
 	
    
@@ -52,6 +55,11 @@ class ALump_User extends ALump_Model {
 		return $user;
 		
 	}
+    
+    public static function updateVisitTime($username){
+        $db = ALump_Db::getInstance();
+        $db->update(ALump_Common::getTabName("users"),array("visited"=>time()), " `name`='$username'" );
+    }
 	
 	public static function getUserByName($name){
 		$db = ALump_Db::getInstance();
@@ -66,6 +74,19 @@ class ALump_User extends ALump_Model {
 		return $user;
 	
 	}
+    
+    public static function updateUserPassword($userId, $newPassword){
+        $db = ALump_Db::getInstance();
+        return $db->update(ALump_Common::getTabName("users"),array("password"=>$newPassword), " `id`='$userId'" );
+    }
+    
+    public static function update($user){
+        $db = ALump_Db::getInstance();
+        return $db->update(ALump_Common::getTabName("users"),
+                array("nickname"=>$user->nickname,"url"=>$user->url,"mail"=>$user->mail),
+                " `id`='$user->id'" );
+        
+    }
 	
 	public function nickName(){
 		echo $this->nickname;

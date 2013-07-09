@@ -5,7 +5,10 @@
  *
  */
 class ALump_Admin {
-	
+	/**
+     *
+     * 配置后台管理的<head><title>显示
+     */
 	public static $admin_menus = array(
 			"post-add.php"     => "撰写文章",
 			"post-edit.php"     => "编辑文章",
@@ -18,6 +21,9 @@ class ALump_Admin {
 			"page-manage.php"  => "管理页面",
             "profile.php"  => "个人设置",
             "site-setting.php"  => "站点设置",
+            "post-setting.php"  => "文章设置",
+            "comment-setting.php" => '评论设置',
+            "index.php" => 'Welcome to a lump.',
 	);
 	/**
 	 * 后台页面专用的页面大小
@@ -30,12 +36,12 @@ class ALump_Admin {
 			$fname = substr($php_self, strripos($php_self, "/") + 1);
 		}
 		if(empty($fname)){
-			return "";
+			return "Welcome to a lump.";
 		}else{
 			if(isset(self::$admin_menus[$fname])){
 				return self::$admin_menus[$fname];
 			}else{
-				return "";
+				return "Welcome to a lump.";
 			}
 		}
     }

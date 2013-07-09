@@ -68,11 +68,15 @@ select { border:solid 1px #e0e0e0; padding:2px;
 }
 
 .form-tab{
-    background: #d0ddd0;
+    
  -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
           border-radius: 4px;
    padding:6px 12px 6px 12px;
+}
+
+.tab-background{
+    background: #d0ddd0;
 }
 
 
@@ -101,6 +105,7 @@ div.updated, div.error {
 .small_form2 .textbox { width:400px; float:left; }
 .small_form2 .field_body { width:300px; }
 .small_form2 .info { width:200px; float:left; margin-left:40px; }
+
 
 #top{
   background:#808880;
@@ -250,6 +255,60 @@ border:solid 1px #e0e0e0;
 .form-field{
 	margin-right: 40px;
 }
+.form-field .label{
+    word-break: keep-all; 
+    white-space: nowrap;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.manage_div .setting-list{
+    margin-top: 6px;
+    padding:6px;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+    float:left;
+    width:100%;
+}
+
+.manage_div .setting-list .brief .profile-name span{
+	font-size:24px;
+    font-weight:bold;
+}
+
+.manage_div .setting-list .brief .profile-info{
+	margin-top:3px;
+    width:100%;
+    float:left;
+}
+
+.manage_div .setting-list .brief .profile-info-text{
+	float:left;
+}
+
+.manage_div .setting-list .brief .profile-info-img{
+	float:right;
+    width:48px;
+    margin-right:48px;
+}
+.manage_div .setting-list .cpassword{
+    margin-top:64px;
+    float:left;
+}
+.manage_div .setting-list .cpassword .head{
+    border-bottom: 1px solid #eee;
+    font-size:18px;
+    font-weight:bold;
+    padding:3px 0 3px 0;
+} 
+
+.font-focus{
+    color:#66CC66;
+    font-weight: bold;
+}
+
+
 .narrator{
 	color:#aaa;
     font-size:10px;
@@ -286,10 +345,29 @@ border:solid 1px #e0e0e0;
     color:#006633;
     background: #b0ccb0;
     border:1px dashed #000;
+    text-align: center;
+    margin:0 auto;
+    margin-top:6px;
+    border-color: #eed3d7;
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
-.setting-hander-info .error {
-    background: #FFCCCC;
+.error {
+    background-color: #f2dede;
+    color: #b94a48;
+    font-size: 12px;
+    padding:2px;
+    
+}
+.warn{
+    background-color: #f2de00;
+    color: #b94a00;
+    font-size: 12px;
 }
 
 

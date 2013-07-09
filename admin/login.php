@@ -1,17 +1,30 @@
 <?php 
 include 'inc.php';
-
+$errMsg = '';
+function loginError(){
+    global $errMsg;
+    if(!empty($errMsg)){
+        echo '<div class="login-error">'.$errMsg.'</div>';
+    }
+}
 $login = ALump::$request->post('login');
 if(!empty($login)){
 	$username = ALump_Common::removeXSS(ALump::$request->post('user'));
 	$pass = ALump_Common::removeXSS(ALump::$request->post('pass'));
 	$em_hasher = PasswordHash::getInstance();
 	$user = ALump_User::getUserByName($username);
+	if(empty($user)){
+        $errMsg = '用户名不能为空';
+    }else{
+        if($user->name == $username && $em_hasher->CheckPassword($pass, $user->password)){
+            Alump_Cookie::set(ALump_Common::$COOKIE_AUTH_NAME, $user->name);
+            ALump_User::updateVisitTime($user->name);
+            header("Location: index.php");
+        }else{
+            $errMsg = '用户名或密码不正确';
+        }
+    }
 	
-	if($user && $user->name == $username && $em_hasher->CheckPassword($pass, $user->password)){
-		Alump_Cookie::set(ALump_Common::$COOKIE_AUTH_NAME, $user->name);
-		header("Location: index.php");
-	}
 }
 
 
@@ -31,12 +44,29 @@ body { background:#f9f9f9; font-size:14px; }
 #login_form .textbox { border:1px solid #e0e0e0; padding:3px; margin-bottom:20px; border-radius:3px 3px 3px 3px; }
 #login_form .bottom { text-align:right; }
 #login_form .button { padding:6px 16px; font-size:14px; }
+.login-error{
+    width:80%;
+    text-align: center;
+    margin:0 auto;
+    margin-top:6px;
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
   </style>
 </head>
 <body>
+      <?php loginError() ?>
   <form action="login.php" method="post">
   <div id="login_title"><?php echo ALump_Common::$CMS_NAME?></div>
   <div id="login_form">
+   
     <div id="login_form_box">
       <div class="label">帐号</div>
       <div class="textbox"><input name="user" type="text"></div>
