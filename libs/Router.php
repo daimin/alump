@@ -29,6 +29,7 @@ class ALump_Router {
 			$SE_STRING = substr($SE_STRING, strlen($siteDir));
 		}
 
+
 		if(!ALump::$options->rewrite){
 			$SE_STRING = substr($SE_STRING, strlen("/index.php"));
 		}
@@ -65,9 +66,9 @@ class ALump_Router {
 		$module_name = $ary_url['controller'];
 		$module_name = ucfirst($module_name);
 		$module_file = __ROOT_DIR__.'/libs/controller/'.$module_name.'Controller.php';
-		
-		
-		$method_name = $ary_url['method'];
+		//upload?dir=image		
+		$method_name = $this->_trimUnUseSymbol($ary_url['method']);
+        
 		if(file_exists($module_file)){
 			$this->_callModule($module_name,$method_name,$ary_url );
 		}
@@ -91,7 +92,6 @@ class ALump_Router {
 			$this->_defaultModuleCall();
 		}
 		$obj_module = new $module_name();    //实例化模块m
-		
 		
 		if(!method_exists($obj_module, $method_name)){
 //		    if(!empty($method_name) && empty($ary_url['pramers'])){
@@ -141,6 +141,18 @@ class ALump_Router {
 		
 		}
 	}
+    
+    private function _trimUnUseSymbol($name){
+        $syms = array("?", "&");
+        foreach($syms as $sym){
+            $pos = strrpos($name, $sym);
+            if($pos !== False){
+                $name = substr($name, 0, $pos);
+            }
+        }
+        
+        return $name;
+    }
 	
 	
 }

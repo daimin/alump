@@ -97,7 +97,7 @@
 			KindEditor.ready(function(K) {
 				editor = K.create('#post-content', {
 					uploadJson : '<?php 
-					ALump::$options->siteUrl("folks/upload")?>',
+					ALump::$options->siteUrl("folks/upload/")?>',
 					allowFileManager : false,
 					afterUpload : function(data) { 
 						var fname = getFileNameFromUrl(data);

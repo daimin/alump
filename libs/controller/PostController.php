@@ -21,7 +21,9 @@ class ALump_PostController extends Alump_BaseController {
 	  
 		$this->getModuleUrl('t/'.$slug.$this->options->suffix, 'comment-page-');
 		$this->_curPost = ALump_Post::getPostBySlug($slug);
-        
+        if(empty($this->_curPost->id)){
+		    $this->say404();
+		}
         ALump_Post::updateViewCount($this->_curPost);
 		if($action == "comment"){
 			$this->doComment($this->_curPost->id);

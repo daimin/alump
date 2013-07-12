@@ -15,13 +15,16 @@ if(!empty($login)){
 	$user = ALump_User::getUserByName($username);
 	if(empty($user)){
         $errMsg = '用户名不能为空';
+        
     }else{
         if($user->name == $username && $em_hasher->CheckPassword($pass, $user->password)){
             Alump_Cookie::set(ALump_Common::$COOKIE_AUTH_NAME, $user->name);
             ALump_User::updateVisitTime($user->name);
+            ALump_Logger::login($user.',login success.');
             header("Location: index.php");
         }else{
             $errMsg = '用户名或密码不正确';
+            ALump_Logger::login($user.',login failured.');
         }
     }
 	

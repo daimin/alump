@@ -49,6 +49,11 @@ class ALump_Common {
     /* POST状态 */
     public static $PUBLISH = 1;
     public static $DRAFT = 0;
+    
+    /* COMMENT状态 */
+    public static $ADOPT = 1; //通过
+    public static $AUDIT = 0; //审核中
+    public static $TRASH = 2; //垃圾
 
     public static function init($dbCfg) {
         Alump_Db::init($dbCfg);
@@ -240,6 +245,7 @@ class ALump_Common {
     }
 
     public static function escape($val) {
+        $val = str_replace(array("\n", "\r\n"), '<br/>', $val);
         return htmlspecialchars($val, ENT_QUOTES);
     }
 
@@ -476,6 +482,9 @@ EOT;
         }
     }
 
+    public static function decodeURIComponent($str){
+        return iconv("UTF-8", "gbk",  urldecode($str));
+    }
     /**
      * 检查文件是否能上传
      * @return boolean
@@ -519,6 +528,35 @@ EOT;
             return round($size / (1024 * 1024 * 1024.0), 2).' GB';
         }else{
             return $size.' Byte';
+        }
+    }
+    
+    /**
+     * 删除文件或目录
+     * @param type $file
+     * @return boolean
+     */
+    public static function delFile($filePath){
+        if (! is_dir ( $filePath )) {
+            unlink ( $filePath );
+            return True;
+        } else {
+            $str = scandir ( $filePath );
+            foreach ( $str as $file ) {
+                if ($file != "." && $file != "..") {
+                    $path = $filePath . "/" . $file;
+                    if (! is_dir ( $path )) {
+                        unlink ( $path );
+                    } else {
+                        $filePath ( $path );
+                    }
+                }
+            }
+            if (rmdir ( $filePath )) {
+                return True;
+            } else {
+                return False;
+            }
         }
     }
 

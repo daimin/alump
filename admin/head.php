@@ -1,4 +1,8 @@
-<?php include 'inc.php';?>
+<?php 
+if(!defined("__ROOT_DIR__")){
+    include 'inc.php';
+}
+?>
 <!DOCTYPE html>
 <!-- saved from url=(0034)http://localhost/mc-admin/post.php -->
 <html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

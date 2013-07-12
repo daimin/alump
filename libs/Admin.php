@@ -23,12 +23,11 @@ class ALump_Admin {
             "site-setting.php"  => "站点设置",
             "post-setting.php"  => "文章设置",
             "comment-setting.php" => '评论设置',
+            "log-manage.php"   => '日志管理',
+            "comment-manage.php" => '评论管理',
             "index.php" => 'Welcome to a lump.',
 	);
-	/**
-	 * 后台页面专用的页面大小
-	 */
-	public static $PAGE_SIZE = 10;
+
 	
 	public static function menu($fname=null){
 		if(empty($fname)){

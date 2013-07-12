@@ -65,19 +65,19 @@
                </li>    
               <li>
               <div class="items">
-                <div class="fllct"><i class="icon-comment"></i><a href="post-recycle.php" >评论</a></div>
+                <div class="fllct"><i class="icon-comment"></i><a href="comment-manage.php" >评论</a></div>
               </div>
               </li> 
-              <li>
-              <div class="items">
-                <div class="fllct"><i class="icon-hand-up"></i><a href="setting.php" >链接</a></div>
-              </div>
-            </li>
               <li>
               <div class="items">
                 <div class="fllct"><i class="icon-picture"></i><a href="setting.php" >附件</a></div>
               </div>
             </li>
+            <li>
+              <div class="items">
+                <div class="fllct"><i class="icon-share-alt"></i><a href="log-manage.php" >日志</a></div>
+              </div>
+              </li> 
           </ul>
         </dd>
       </dl>
@@ -121,23 +121,6 @@
               <li>
               <div class="items">
                 <div class="fllct"><i class="icon-leaf"></i><a href="setting.php" >插件</a></div>
-              </div>
-            </li>
-          </ul>
-        </dd>
-      </dl>
-       <dl class="bitem">
-        <dt onclick="showHide('items1_5')"><b>日志</b></dt>
-        <dd style="display:block" class="sitem" id="items1_5">
-          <ul class="sitemu">
-              <li>
-              <div class="items">
-                <div class="fllct"><i class="icon-share-alt"></i><a href="post-recycle.php" >登陆日志</a></div>
-              </div>
-              </li>  
-              <li>
-              <div class="items">
-                <div class="fllct"><i class="icon-asterisk"></i><a href="setting.php" >操作日志</a></div>
               </div>
             </li>
           </ul>

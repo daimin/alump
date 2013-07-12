@@ -155,7 +155,7 @@ if($action == 'post_add'){
 	
 	updateAttachs($postid);
 	
-	
+	ALump_Logger::action("add post ".$post->title);
 	doRedirect($post);
 	
 }
@@ -173,7 +173,7 @@ if($action == "post_edit"){
 	updateMetas($postid);
 	
 	updateAttachs($postid);
-
+    ALump_Logger::action("edit post ".$post->title);
 	doRedirect($post);
 }
 
@@ -201,8 +201,10 @@ if($action == 'delete'){
 		}
 		
 		if(!$res){
+            ALump_Logger::action("delete post failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("delete post success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -232,8 +234,10 @@ if($action == "todraft"){
 		}
 	
 		if(!$res){
+            ALump_Logger::action("change post to draft failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("change post to draft success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -262,8 +266,10 @@ if($action == "topublish"){
 		}
 
 		if(!$res){
+            ALump_Logger::action("publish post failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("publish post success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -299,8 +305,10 @@ if($action == "tocategory"){
 	}
 
 	if(!$res){
+         ALump_Logger::action("change post to another category failure");
 		echo ALump_Common::$FAILURE;
 	}else{
+        ALump_Logger::action("change post to another category success");
 		echo ALump_Common::$SUCCESS;
 	}
 }

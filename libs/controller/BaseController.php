@@ -128,7 +128,7 @@ class Alump_BaseController {
 			return;
 		}
 		$agent = ALump::$request->server('HTTP_USER_AGENT');
-		$content = ALump_Common::removeXSS(ALump::$request->post("text"));
+		$content = ALump_Common::escape(ALump_Common::removeXSS(ALump::$request->post("text")));
 		$type = "comment";
 		$status = 1;
 		

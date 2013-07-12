@@ -15,7 +15,7 @@ $upload_url = '../..'.__UPLOAD_DIR__;
 //文件保存目录路径
 $save_path = __ROOT_DIR__ . __UPLOAD_DIR__;
 //文件保存目录URL
-$save_url = $php_url . $upload_url.'/';
+$save_url = '/'.$php_url . $upload_url.'/';
 
 //定义允许上传的文件扩展名
 $ext_arr = array(
@@ -93,7 +93,7 @@ if (empty($_FILES) === false) {
 		alert("上传文件大小超过限制。");
 	}
 	//检查目录名
-	$dir_name = empty($_GET['dir']) ? 'image' : trim($_GET['dir']);
+	$dir_name = empty($_file_save_dir) ? 'image' : trim($_file_save_dir);
 	if (empty($ext_arr[$dir_name])) {
 		alert("目录名不正确。");
 	}

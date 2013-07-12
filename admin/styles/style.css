@@ -1,4 +1,4 @@
-* { font-family:"songti",Segoe UI,Tahoma,Arial,Verdana,sans-serif; }
+* { font-family:sans-serif,"songti",Segoe UI,Tahoma,Arial,Verdana,sans-serif; }
 html, body { padding:0; margin:0; }
 body { width:1024px;margin:0 auto 0 auto;font-size:12px; overflow:scroll;}
 a { text-decoration:none; color:#426DC9; }
@@ -370,6 +370,53 @@ border:solid 1px #e0e0e0;
     font-size: 12px;
 }
 
+.log-filesize{
+    margin-left:6px;
+    color:#22cc00;
+    font-size:10px;
+    font-style:italic;
+    /*font-weight:bold;*/
+}
+
+.admin_tab{
+    float:left;
+    background:#B0BBB0;
+    width:100%;
+
+}
+.admin_tab div{
+    float:left;
+    height:30px;
+    margin-right:6px;
+    margin-left:6px;
+    line-height: 30px;
+}
+
+.admin_tab div .current{
+    font-weight:bold;
+    font-size:13px;
+    color:#80F;
+}
+
+.comment-form{
+    width:100%;
+    margin:12px auto;
+    background:#CCDCCC;
+    text-align: center;
+   
+}
+.comment-form div{
+    margin-top:12px;
+    height:32px;
+    float:left;
+}
+.comment-form div label{
+    font-weight: bold;
+    margin-left: 12px;
+}
+.comment-form textarea{
+    width:90%;
+}
 
 /*图标*/
 [class^="icon-"],

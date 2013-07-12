@@ -57,9 +57,66 @@ class ALump_Comment extends ALump_Model {
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
 			$comments->add(new ALump_Comment($row));
 		}
 		return $comments;
+	}
+    
+    public static function getCommentsPageByStatus(){
+        $status = ALump::$request->get("s");
+    
+        switch($status){
+            case 'adopt':
+                $status = ALump_Common::$ADOPT;
+                break;
+            case 'audit':
+                $status = ALump_Common::$AUDIT;
+                break;
+            case 'trash':
+                $status = ALump_Common::$TRASH;
+                break;
+            default:
+                $status = ALump_Common::$ADOPT;
+        }
+        
+        $keyword = ALump::$request->get('k');
+        $key_sql = '';
+        if(!empty($keyword)){
+            $key_sql = " and (`author` like '%$keyword%' or `ip` like '%$keyword%' or `content` like '%$keyword%')";
+        }
+        
+		$db = ALump_Db::getInstance();
+		$ordersql = "`created` desc";
+		
+		$count = $db->count(ALump_Common::getTabName("comments"),null,array("where"=>' `status`='.$status.$key_sql));
+		
+		$comments = new ALump_Array($count);
+		
+		
+		$db->select(ALump_Common::getTabName("comments"), null, array(
+				"where" => "`status`=$status ".$key_sql,
+				"order" => $ordersql,
+				"limit" => $comments->pageNav->limitSql()));
+		
+		
+		$rows = $db->fetch_array();
+		
+		foreach($rows as $row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
+			$comments->add(new ALump_Comment($row));
+		}
+		return $comments;
+	}
+    
+    public static function getCommentCountByStatus($status){
+        
+		$db = ALump_Db::getInstance();
+		
+		$count = $db->count(ALump_Common::getTabName("comments"),null,array("where"=>' `status`='.$status));
+        
+        return $count;
+		
 	}
 	
 	public function nickName(){
@@ -98,6 +155,20 @@ class ALump_Comment extends ALump_Model {
 		$row = $db->fetch_one();
 		$comment = False;
 		if($row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
+			$comment = new ALump_Comment($row);
+		}
+		
+		return $comment;
+	}
+    
+    public static function getCommentById($id){
+		$db = ALump_Db::getInstance();
+		$db->select(ALump_Common::getTabName("comments"), null, array("where" => "`id`='$id'"));
+		$row = $db->fetch_one();
+		$comment = False;
+		if($row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
 			$comment = new ALump_Comment($row);
 		}
 		
@@ -117,6 +188,7 @@ class ALump_Comment extends ALump_Model {
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
 			$comments->add(new ALump_Comment($row));
 		}
 		return $comments;
@@ -144,10 +216,27 @@ class ALump_Comment extends ALump_Model {
 		$rows = $db->fetch_array();
 		
 		foreach($rows as $row){
+            $row['content'] = ALump_Common::deEscape($row['content']);
 			$comments->add(new ALump_Comment($row));
 		}
 		return $comments;
 	}
+    
+    public static function changeStatus($id, $status){
+        $db = ALump_Db::getInstance();
+        $db->update(ALump_Common::getTabName("comments"), array('status'=>$status)," `id`='$id'");
+    }
+    
+    public static function remove($id){
+        $db = ALump_Db::getInstance();
+        $db->remove(ALump_Common::getTabName("comments"), "`id`='$id'");
+    }
+    
+    public static function update($comment){
+        $db = ALump_Db::getInstance();
+        
+		$db->update(ALump_Common::getTabName("comments"), $comment->toArray(array("id", "created", "status")), "`id`='$comment->id'");
+    }
 	
 	//得到指定的ID的评论是在指定的POST的第几页
 	private function _getCommentPageNo(){

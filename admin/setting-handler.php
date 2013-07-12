@@ -110,9 +110,10 @@ if($action == 'site'){
     $handlerMessage = "设置成功";
     //$attachmentTypes = ALump_Common::escape(ALump::$request->post('attachmentTypes'));
     //$otherAttachment = ALump_Common::escape(ALump::$request->post('otherAttachment'));
-    
+    ALump_Logger::action("site setting");
     
 }else if($action == "change-password"){
+    ALump_Logger::action("change password");
     $old_password = ALump_Common::escape(ALump::$request->post('old_password'));
     if(empty($old_password)){
         $cpasswordErr = "旧密码不能为空";
@@ -140,6 +141,7 @@ if($action == 'site'){
                                 $new_password = $em_hasher->HashPassword($new_password);
                                 if(ALump_User::updateUserPassword($user->id, $new_password)){
                                     $handlerMessage = "用户密码修改成功";   
+                                    ALump_Logger::action("change password success");
                                 }
                             }
                         }
@@ -150,7 +152,7 @@ if($action == 'site'){
             }
 
     }
-
+   
 }else if($action == "update-profile"){
     $nickname = ALump_Common::escape(ALump::$request->post('nickname'));
     $url = ALump_Common::escape(ALump::$request->post('url'));
@@ -169,7 +171,7 @@ if($action == 'site'){
         $user->mail = $mail;
         ALump_User::update($user);
     }
-   
+    ALump_Logger::action("update profile setting");
 }else if($action == "post"){
     $postDateFormat = ALump_Common::escape(ALump::$request->post('postDateFormat'));
     
@@ -210,13 +212,79 @@ if($action == 'site'){
         ALump::$options->set("frontPage", 'page:'.$frontPage);
     }
     
+    $adminPageSize = ALump_Common::escape(ALump::$request->post('adminPageSize'));
+    $adminPageSize = intval($adminPageSize);
+    ALump::$options->set("adminPageSize", $adminPageSize);
+    
+    
     $handlerMessage = "设置成功";   
+    ALump_Logger::action("update post setting");
 }else if ($action == 'comment') {
     $commentDateFormat = ALump_Common::escape(ALump::$request->post('commentDateFormat'));
     ALump::$options->set("commentDateFormat", $commentDateFormat);
     
-    $commentDateFormat = ALump_Common::escape(ALump::$request->post('commentDateFormat'));
-    ALump::$options->set("commentDateFormat", $commentDateFormat);
+    $commentsListSize = ALump_Common::escape(ALump::$request->post('commentsListSize'));
+    $commentsListSize = intval($commentsListSize);
+    ALump::$options->set("commentsListSize", $commentsListSize);
+    
+    $commentsPageBreak = ALump_Common::escape(ALump::$request->post('commentsPageBreak'));
+    ALump::$options->set("commentsPageBreak", $commentsPageBreak);
+    
+    $commentsPageSize = ALump_Common::escape(ALump::$request->post('commentsPageSize'));
+    $commentsPageSize = intval($commentsPageSize);
+    ALump::$options->set("commentsPageSize", $commentsPageSize);
+    
+    $commentsPageDisplay = ALump_Common::escape(ALump::$request->post('commentsPageDisplay'));
+    ALump::$options->set("commentsPageDisplay", $commentsPageDisplay);
+    
+    $commentsAvatar = ALump_Common::escape(ALump::$request->post('commentsAvatar'));
+    ALump::$options->set("commentsAvatar", $commentsAvatar);
+    
+    $commentsAvatarRating = ALump_Common::escape(ALump::$request->post('commentsAvatarRating'));
+    ALump::$options->set("commentsAvatarRating", $commentsAvatarRating);
+    
+    $commentsReply = ALump_Common::escape(ALump::$request->post('commentsReply'));
+    ALump::$options->set("commentsReply", $commentsReply);
+    
+    $commentsMaxNestingLevels = ALump_Common::escape(ALump::$request->post('commentsMaxNestingLevels'));
+    $commentsMaxNestingLevels = intval($commentsMaxNestingLevels);
+    ALump::$options->set("commentsMaxNestingLevels", $commentsMaxNestingLevels);
+    
+    $commentsOrder = ALump_Common::escape(ALump::$request->post('commentsOrder'));
+    ALump::$options->set("commentsOrder", $commentsOrder);
+    
+    $commentsRequireModeration = ALump_Common::escape(ALump::$request->post('commentsRequireModeration'));
+    ALump::$options->set("commentsRequireModeration", $commentsRequireModeration);
+    
+    $commentsRequireMail = ALump_Common::escape(ALump::$request->post('commentsRequireMail'));
+    ALump::$options->set("commentsRequireMail", $commentsRequireMail);
+    
+    $commentsRequireURL = ALump_Common::escape(ALump::$request->post('commentsRequireURL'));
+    ALump::$options->set("commentsRequireURL", $commentsRequireURL);
+    
+    $commentsAutoClose = ALump_Common::escape(ALump::$request->post('commentsAutoClose'));
+    ALump::$options->set("commentsAutoClose", $commentsAutoClose);
+    
+    $commentsPostTimeout = ALump_Common::escape(ALump::$request->post('commentsPostTimeout'));
+    $commentsPostTimeout = intval($commentsPostTimeout);
+    ALump::$options->set("commentsPostTimeout", $commentsPostTimeout);
+    
+    $commentsPostIntervalEnable = ALump_Common::escape(ALump::$request->post('commentsPostIntervalEnable'));
+    ALump::$options->set("commentsPostIntervalEnable", $commentsPostIntervalEnable);
+    
+    $commentsPostInterval = ALump_Common::escape(ALump::$request->post('commentsPostInterval'));
+    $commentsPostInterval = doubleval($commentsPostInterval);
+    $commentsPostInterval = $commentsPostInterval * 60;
+    ALump::$options->set("commentsPostInterval", $commentsPostInterval);
+    
+    $commentsHTMLTagAllowed = ALump_Common::escape(ALump::$request->post('commentsHTMLTagAllowed'));
+    ALump::$options->set("commentsHTMLTagAllowed", $commentsHTMLTagAllowed);
+    
+    $commentsIPDisallowed = ALump_Common::escape(ALump::$request->post('commentsIPDisallowed'));
+    ALump::$options->set("commentsIPDisallowed", $commentsIPDisallowed);
+    
+    $handlerMessage = "设置成功";   
+    ALump_Logger::action("update comment setting");
 }
 
 

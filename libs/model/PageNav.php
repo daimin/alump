@@ -12,7 +12,7 @@ class ALump_PageNav {
 	
 	public function __construct($itemcount, $pagesize = False){
 		if(ALump::$options->isAdmin()){
-			$this->pagesize = ALump_Admin::$PAGE_SIZE;
+			$this->pagesize = ALump::$options->adminPageSize;
 		}else{
 			$this->pagesize = ALump::$options->pageSize;
 		}

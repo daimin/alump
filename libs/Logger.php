@@ -38,7 +38,7 @@ class ALump_Logger {
 	 *        	日志类型
 	 */
 	public static function log($s_message, $s_type = 'log') {
-		if(!defined('__DEBUG__') || __DEBUG__ == False){
+		if((!defined('__DEBUG__') || __DEBUG__ == False) && ($s_type=='log' || $s_type=='debug')){
 			return;
 		}
 		
@@ -55,13 +55,19 @@ class ALump_Logger {
 		$s_target = LOG_PATH;
 		switch ($s_type) {
 			case 'debug' :
-				$s_target .= 'Out_' . $s_now_day . '.log';
+				$s_target .= 'Log_' . $s_now_day . '.log';
 				break;
 			case 'error' :
 				$s_target .= 'Err_' . $s_now_day . '.log';
 				break;
 			case 'log' :
 				$s_target .= 'Log_' . $s_now_day . '.log';
+				break;
+            case 'login' :
+				$s_target .= 'Login_' . $s_now_day . '.log';
+				break;
+            case 'action' :
+				$s_target .= 'Action_' . $s_now_day . '.log';
 				break;
 			default :
 				$s_target .= 'Log_' . $s_now_day . '.log';
@@ -87,6 +93,15 @@ class ALump_Logger {
 	public static function err($s_message){
 		return self::log($s_message, "error");
 	}
+    
+    public static function login($s_message){
+        return self::log($s_message, "login");
+    }
+    
+    public static function action($s_message){
+        $s_message = ALump_Common::loginUser().','.$s_message;
+        return self::log($s_message, "action");
+    }
 }
 
 ?>

@@ -20,6 +20,16 @@ class ALump_FolksController extends Alump_BaseController {
 		header("Content-Type:".ALump_Common::getContentType("jquery.js"));
 		echo file_get_contents(__ROOT_DIR__.'/libs/folks/libs/jquery.js');
 	}
+    
+    public function upload($_file_save_dir=False){
+        if(empty($_file_save_dir)){
+            if(isset($_GET['dir'])){
+                $_file_save_dir = $_GET['dir'];
+            }
+            
+        }
+        include __ROOT_DIR__ . '/libs/folks/UploadAttach.php';
+    }
 }
 
 ?>

@@ -16,7 +16,7 @@
                 ?> 
                 <?php while($post = $posts->next()):?>
                 <li><a href="<?php $post->permalink()?>"><?php echo $post->title?></a></li>
-                <?php endwhile?>
+                <?php endwhile;?>
             </ul>
 	    </div>
         <?php endif; ?>
@@ -41,7 +41,7 @@
                
                 <?php while($category = $categorys->next()):?>
                 <li><a href="<?php $category->permalink()?>"><?php echo $category->name?></a> <?php echo $category->count?></li>
-                <?php endwhile?>
+                <?php endwhile;?>
             </ul>
 		</div>
         <?php endif; ?>
@@ -53,7 +53,7 @@
                 <?php $this->alump('Contents_Post_Date', 'type=month&format=F Y')->to($archives) ?>
                 <?php while($archive = $archives->next()):?>
                 <li><a href="<?php $archive->permalink()?>"><?php echo $archive->name ?></a></li>
-                <?php endwhile?>
+                <?php endwhile;?>
                 
             </ul>
 		</div>

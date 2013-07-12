@@ -76,7 +76,7 @@ if($action == 'add-category'){
 	$cateid = ALump_Meta::save($category);
 	
 	updateOrder($cateid, null);
-	
+	ALump_Logger::action("add-category");
 	doRedirect($category);
 	
 }
@@ -85,7 +85,7 @@ if($action == "update-category"){
 	$category = getCategoryValue();
 	
 	$cateid = ALump_Meta::update($category);
-		
+    ALump_Logger::action("update-category");
 	doRedirect($category);	
 }
 
@@ -96,7 +96,7 @@ if($action == 'add-tag'){
 	$tagid = ALump_Meta::save($tag);
 
 	updateOrder($tagid, null);
-
+    ALump_Logger::action("add-tag");
 	doRedirect($tag);
 
 }
@@ -127,8 +127,10 @@ if($action == 'delete'){
 		}
 		
 		if(!$res){
+            ALump_Logger::action("delete tag failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("delete tag success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -136,8 +138,10 @@ if($action == 'delete'){
 }
 
 if($action == "sortOrder"){
+    
 	$mateid = ALump::$request->get("id");
 	$order = ALump::$request->get("order");
+    ALump_Logger::action("sortOrder of categorys");
 	updateOrder($mateid, $order);
 	exit();
 }

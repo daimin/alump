@@ -30,35 +30,35 @@
       <div class="textbox">
       <div class="multiline">
       <input type="checkbox" id="commentsPageBreak" name="commentsPageBreak" value="1">
-      <label for="commentsPageBreak">启用分页, 并且每页显示
+      <label for="commentsPageBreak">启用分页, </label>并且每页显示
           <input type="text" size="2" name="commentsPageSize" value="<?php echo ALump::$options->commentsPageSize ?>" />
           篇评论, 在列出时将
-          <select name="commentsPageDisplay">
+          <select name="commentsPageDisplay" id="commentsPageDisplay">
               <option value="first">第一页</option>
               <option value="last">最后一页</option>
           </select>
-          作为默认显示</label>
+          作为默认显示
       </div>
       <div class="multiline">
-      <input type="checkbox" id="commentsAvatar" name="commentsPageBreak" value="1">
-      <label for="commentsPageBreak">启用<a target="_blank" href="http://cn.gravatar.com/">Gravatar</a>头像服务, 最高显示评级为
+      <input type="checkbox" id="commentsAvatar" name="commentsAvatar" value="1">
+      <label for="commentsAvatar">启用<a target="_blank" href="http://cn.gravatar.com/">Gravatar</a>头像服务, </label>最高显示评级为
           <select id="commentsShow-commentsAvatarRating" name="commentsAvatarRating">
             <option value="G" selected="true">G - 普通</option>
             <option value="PG">PG - 13岁以上</option>
             <option value="R">R - 17岁以上成人</option>
             <option value="X">X - 限制级</option></select>
-      </label>
+      
       </div>
       <div class="multiline">
       <input type="checkbox" id="commentsReply" name="commentsReply" value="1">
-      <label for="commentsReply">启用评论回复，以  
-          <input type="text" size="2" name="commentsMaxNestingLevels" value="<?php echo ALump::$options->commentsMaxNestingLevels ?>" />
+      <label for="commentsReply">启用评论回复，</label>以  
+          <input type="text" size="2" name="commentsMaxNestingLevels" id="commentsMaxNestingLevels" value="<?php echo ALump::$options->commentsMaxNestingLevels ?>" />
          层作为每个评论最多的回复层数</br>
          将<select id="commentsShow-commentsOrder" name="commentsOrder">
             <option value="DESC">较新的</option>
             <option value="ASC" selected="true">较旧的</option></select>
          的评论显示在前面
-      </label>
+      
       </div>
 
       </div>
@@ -82,24 +82,24 @@
       </div>
       <div class="multiline">
       <input type="checkbox" id="commentsAutoClose" name="commentsAutoClose" value="1">
-      <label for="commentsRequireURL">在文章发布<input type="text" size="2" name="commentsPostTimeout">天以后自动关闭评论</label>
+      <label for="commentsAutoClose">在文章发布</label><input type="text" size="2" name="commentsPostTimeout" value="<?php echo ALump::$options->commentsPostTimeout ?>">天以后自动关闭评论
       </div>
       <div class="multiline">
       <input type="checkbox" id="commentsPostIntervalEnable" name="commentsPostIntervalEnable" value="1">
-      <label for="commentsPostIntervalEnable">同一IP发布评论的时间间隔限制为<input type="text" size="2" name="commentsPostInterval">分钟</label>
+      <label for="commentsPostIntervalEnable">同一IP发布评论的时间间隔限制为</label><input type="text" size="2" name="commentsPostInterval" value="<?php echo round(ALump::$options->commentsPostInterval/60.0, 2) ?>">分钟
       </div>
       </div>
     </div>
     <div class="clear"></div>
     <div class="field">
       <div class="label">允许使用的HTML标签</div>
-      <textarea name="commentsHTMLTagAllowed" rows="4" class="textbox"></textarea>
-      <div class="info">默认的用户评论不允许填写任何的HTML标签, 你可以在这里填写允许使用的HTML标签.</div>
+      <textarea name="commentsHTMLTagAllowed" rows="4" class="textbox"><?php ALump::$options->commentsHTMLTagAllowed() ?></textarea>
+      <div class="info">默认的用户评论不允许填写任何的HTML标签, 你可以在这里填写允许使用的HTML标签.<br/>如：&lt;a&gt;</div>
     </div>
     <div class="clear"></div>
     <div class="field">
       <div class="label">IP过滤</div>
-      <textarea name="commentsIPDisallowed" rows="4" class="textbox"></textarea>
+      <textarea name="commentsIPDisallowed" rows="4" class="textbox"><?php ALump::$options->commentsIPDisallowed() ?></textarea>
       <div class="info">禁止拥有此IP的用户发表留言/评论。每行一个。<br/>
       例如：<br/>192.168.211.11<br/>192.168.211.*<br/>192.168.*</div>
     </div>
@@ -117,44 +117,6 @@
 <script type="text/javascript">
 var _$ = function(id){return document.getElementById(id);};
 
-function attachmentTypesChecked(){
-    var attachmentTypes = '<?php echo ALump::$options->attachmentTypes?>';
-    attachmentTypes = attachmentTypes.split(",");
-    //@image@,@media@,@doc@,cpp,java
-    if(attachmentTypes && attachmentTypes.length > 0){
-        var elseat = [];
-         for(var i = 0, len = attachmentTypes.length;i < len; i++){
-             var at = attachmentTypes[i];
-             if(at == '@image@'){
-                 _$("@image@attachment").checked = true;
-             }else if(at == '@media@'){
-                 _$("@media@attachment").checked = true;
-             }else if(at == '@doc@'){
-                 _$("@doc@attachment").checked = true;
-             }else{
-                   elseat[elseat.length] =   at;
-             }
-         }
-         
-         if(elseat.length > 0){
-               _$("other@attachment").checked = true;
-               _$("otherAttachment").value = elseat.join(",");
-         }
-    }
-}
-
-function timezoneSelected(){
-    var timezoneBoxs = _$("timezone-0-5");
-    var options = timezoneBoxs.options;
-    var curTimezone = '<?php echo ALump::$options->timezone?>';
-    for(var i = 0, len = options.length; i < len;i++){
-        if(options[i].value == curTimezone){
-            options[i].selected = true;
-            break;
-        }
-    }
-}
-
 function handlerInfoInterval(){
     var settingHanderInfo = document.getElementById("setting-hander-info");
     if(settingHanderInfo){
@@ -165,37 +127,82 @@ function handlerInfoInterval(){
     }
 }
 
-function rewriteChecked(){
-    var rewrite = '<?php echo ALump::$options->rewrite?>';
-    if(rewrite == 0){
-        _$("site_rewrite_no").checked = true;
-    }else{
-        _$("site_rewrite_yes").checked = true;
-    }
+function commentDisplay(){
+   var commentsPageBreak = '<?php echo ALump::$options->commentsPageBreak?>';
+   if(commentsPageBreak == 1){
+      _$("commentsPageBreak").checked = true;
+   }
+   var commentsPageDisplay = '<?php echo ALump::$options->commentsPageDisplay?>';
+   var options = _$("commentsPageDisplay").options;
+   for(var i = 0,len = options.length; i < len; i++){
+       var opt = options[i];
+       if(opt.value == commentsPageDisplay){
+           opt.selected = true;
+       }
+   }
+   
+   var commentsAvatar = '<?php echo ALump::$options->commentsAvatar?>';
+   if(commentsAvatar == 1){
+      _$("commentsAvatar").checked = true;
+   }
+   var commentsAvatarRating = '<?php echo ALump::$options->commentsAvatarRating?>';
+   var options = _$("commentsShow-commentsAvatarRating").options;
+   for(var i = 0,len = options.length; i < len; i++){
+       var opt = options[i];
+       if(opt.value == commentsAvatarRating){
+           opt.selected = true;
+       }
+   }
+   
+   var commentsReply = '<?php echo ALump::$options->commentsReply?>';
+   if(commentsReply == 1){
+      _$("commentsReply").checked = true;
+   }
+   var commentsOrder = '<?php echo ALump::$options->commentsOrder?>';
+   var options = _$("commentsShow-commentsOrder").options;
+   for(var i = 0,len = options.length; i < len; i++){
+       var opt = options[i];
+       if(opt.value == commentsOrder){
+           opt.selected = true;
+       }
+   }
+   
 }
 
-function suffixChecked(){
-    var suffix = '<?php echo ALump::$options->suffix?>';
-    if(suffix == '.html'){
-        _$("suffix_html").checked = true;
-    }else if(suffix == '.htm'){
-        _$("suffix_htm").checked = true;
-    }else if(suffix == '.php'){
-        _$("suffix_php").checked = true;
-    }else if(suffix == '.aspx'){
-        _$("suffix_aspx").checked = true;
-    }else if(suffix == '.jsp'){
-        _$("suffix_jsp").checked = true;
-    }else{
-        _$("suffix_0").checked = true;
-    }
+function commentSubmit(){
+   var commentsRequireModeration = '<?php echo ALump::$options->commentsRequireModeration?>';
+   if(commentsRequireModeration == 1){
+      _$("commentsRequireModeration").checked = true;
+   }
+   
+   var commentsRequireMail = '<?php echo ALump::$options->commentsRequireMail?>';
+   
+   if(commentsRequireMail == 1){
+      _$("commentsRequireMail").checked = true;
+   }
+   
+   var commentsRequireURL = '<?php echo ALump::$options->commentsRequireURL?>';
+   if(commentsRequireURL == 1){
+      _$("commentsRequireURL").checked = true;
+   }
+   
+   var commentsAutoClose = '<?php echo ALump::$options->commentsAutoClose?>';
+   if(commentsAutoClose == 1){
+      _$("commentsAutoClose").checked = true;
+   }
+   
+   
+   
+   var commentsPostIntervalEnable = '<?php echo ALump::$options->commentsPostIntervalEnable?>';
+   if(commentsPostIntervalEnable == 1){
+      _$("commentsPostIntervalEnable").checked = true;
+   }
 }
+
 window.onload = function(){
-    timezoneSelected();
-    attachmentTypesChecked();
+    commentDisplay();
+    commentSubmit();
     handlerInfoInterval();
-    rewriteChecked();
-    suffixChecked();
 
 };
 </script>

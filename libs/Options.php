@@ -276,6 +276,21 @@ class ALump_Options{
 		return $this->adminUrl("profile.php");
 	}
 	
+    public function commentsHTMLTagAllowed(){
+        if(isset($this->commentsHTMLTagAllowed)){
+            echo $this->commentsHTMLTagAllowed;
+        }else{
+            echo '';
+        }
+    }
+    
+    public function commentsIPDisallowed(){
+        if(isset($this->commentsIPDisallowed)){
+            echo $this->commentsIPDisallowed;
+        }else{
+            echo '';
+        }
+    }
 	
 	
 }

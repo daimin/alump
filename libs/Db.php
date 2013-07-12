@@ -34,7 +34,7 @@ class ALump_Db {
 	}
 	
 	public function query($sql) {
-		//Alump_Logger::log($sql);
+		ALump_Logger::log($sql);
 		$this->result = $this->mysqli->query ( $sql );
 		if (! $this->result) {
 			Alump_Common::error ( "Mysql执行错误: $sql <br/>" . $this->mysqli->error );

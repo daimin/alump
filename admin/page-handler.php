@@ -126,7 +126,7 @@ if($action == 'page_add'){
 	updateMetas($pageid);
 	
     updateAttachs($pageid);
-	
+	ALump_Logger::action("add page ".$page->title);
 	doRedirect($page);
 	
 }
@@ -144,7 +144,7 @@ if($action == "page_edit"){
     updateMetas($pageid);
 
 	updateAttachs($pageid);
-	
+	ALump_Logger::action("add page ".$page->title);
 	doRedirect($page);
 }
 
@@ -172,8 +172,10 @@ if($action == 'delete'){
 		}
 		
 		if(!$res){
+            ALump_Logger::action("add page failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("add page success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -203,8 +205,10 @@ if($action == "todraft"){
 		}
 	
 		if(!$res){
+            ALump_Logger::action("change page to draft failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("change page to draft success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -233,8 +237,10 @@ if($action == "topublish"){
 		}
 
 		if(!$res){
+             ALump_Logger::action("publish page failure");
 			echo ALump_Common::$FAILURE;
 		}else{
+            ALump_Logger::action("publish page success");
 			echo ALump_Common::$SUCCESS;
 		}
 	}
@@ -270,8 +276,10 @@ if($action == "tocategory"){
 	}
 
 	if(!$res){
+        ALump_Logger::action("change page to another category failure");
 		echo ALump_Common::$FAILURE;
 	}else{
+        ALump_Logger::action("change page to another category success");
 		echo ALump_Common::$SUCCESS;
 	}
 }
@@ -287,6 +295,7 @@ function updateOrder($pageid, $orderVal){
 if($action == "sortOrder"){
 	$pageid = ALump::$request->get("id");
 	$order = ALump::$request->get("order");
+    ALump_Logger::action("sort page");
 	updateOrder($pageid, $order);
 	exit();
 

@@ -22,9 +22,9 @@
       <div class="label">站点首页</div>
       <div class="textbox">
       <input  type="radio" id="frontPage_recent" name="frontPage" value="recent">
-       <label for="site_rewrite_no">显示最新发布的文章</label><br/>
+       <label for="frontPage_recent">显示最新发布的文章</label><br/>
        <input  type="radio" id="frontPage_page" name="frontPage" value="page">
-       <label for="site_rewrite_yes">使用
+       <label for="frontPage_page">使用
           <?php Alump::Lump('Contents_Page_List')->to($pages); ?>
           <select name="pages" id="frontPage_pages_chk" />
           <?php while($page = $pages->next()): ?>
@@ -52,6 +52,14 @@
      <div class="info">此数目用于指定文章归档输出时每页显示的文章数目.</div>
     <div class="clear"></div>
   </div>
+     <div class="clear"></div>
+    <div class="field">
+      <div class="label">后台每页文章数目</div>
+      <div class="textbox">
+      <input  type="text" size="10" name="adminPageSize" value="<?php echo ALump::$options->adminPageSize?>">
+      </div>
+      <div class="info">此数目用于指定文章后台管理输出时每页显示的文章数目.</div>
+    </div>
     <div class="field">
       <div class="label"></div>
       <div class="field_body"><input class="button" type="submit" name="save" value="保存设置"></div>

@@ -134,6 +134,14 @@ class ALump {
 	public function CommentsRecent(){
 		return ALump_Comment::getCommentsRecent(ALump::$options->commentsListSize);
 	}
+    
+    public function LogsListAdmin(){
+		return ALump_Log::getLogList();
+	}
+    
+    public function CommentsListAdmin(){
+        return ALump_Comment::getCommentsPageByStatus();
+    }
 	
 	
 	
