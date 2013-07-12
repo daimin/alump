@@ -27,17 +27,7 @@
     <textarea id="post-content" name="content" cols="110" rows="25" ></textarea>
   </td>
   </tr>
-<tr>
-          <td colspan="4">
-        <span class="form-field">选择分类：<select name="category"  ><?php 
-     ALump::Lump("Metas_Category_List_Admin")->to($categorys);
-     ?>
-     <?php while($category = $categorys->next()):?>
-     <option value="<?php echo $category->slug?>" <?php $category->selected("slug", "category")?>><?php echo $category->name ?></option>
-     <?php endwhile?>
-     </select></span> 
-        </td>
-</tr>
+
    <tr>
   
      <td>
@@ -89,7 +79,7 @@
 </form>
     </div>
   </div>
-  <link rel="stylesheet" href="kindeditor/themes/default/default.css" />
+  <link rel="stylesheet" href="kindeditor/themes/simple/simple.css" />
 	<script type="text/javascript" charset="utf-8" src="kindeditor/kindeditor-min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="kindeditor/lang/zh_CN.js"></script>
 	<script>
@@ -98,7 +88,9 @@
 				editor = K.create('#post-content', {
 					uploadJson : '<?php 
 					ALump::$options->siteUrl("folks/upload/")?>',
-					allowFileManager : false,
+                    fileManagerJson:'<?php 
+					ALump::$options->siteUrl("folks/fileManager/")?>',
+					allowFileManager : true,
 					afterUpload : function(data) { 
 						var fname = getFileNameFromUrl(data);
 						$("#attachs").val($("#attachs").val() + fname + "|");

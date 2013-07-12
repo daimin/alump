@@ -106,6 +106,14 @@ if($action == 'site'){
     
     $loginUseGD = ALump::$request->post('loginUseGD');
     ALump::$options->set("loginUseGD", $loginUseGD);
+    
+    $thumbImgSize = ALump::$request->post('thumbImgSize');
+    $thumbImgSize = intval($thumbImgSize);
+    ALump::$options->set("thumbImgSize", $thumbImgSize);
+    
+    $cropImgSize = ALump::$request->post('cropImgSize');
+    $cropImgSize = intval($cropImgSize);
+    ALump::$options->set("cropImgSize", $cropImgSize);
 
     $handlerMessage = "设置成功";
     //$attachmentTypes = ALump_Common::escape(ALump::$request->post('attachmentTypes'));

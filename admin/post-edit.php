@@ -110,7 +110,9 @@ ALump::Lump("Content_Post_Edit_Admin")->to($post);
 				editor = K.create('#post-content', {
 					uploadJson : '<?php 
 					ALump::$options->siteUrl("folks/upload")?>',
-					allowFileManager : false,
+					fileManagerJson:'<?php 
+					ALump::$options->siteUrl("folks/fileManager/")?>',
+					allowFileManager : true,
 					afterUpload : function(data) { 
 						var fname = getFileNameFromUrl(data);
 						$("#attachs").val($("#attachs").val() + fname + "|");

@@ -25,7 +25,8 @@ class ALump_Admin {
             "comment-setting.php" => '评论设置',
             "log-manage.php"   => '日志管理',
             "comment-manage.php" => '评论管理',
-            "index.php" => 'Welcome to a lump.',
+            "attach-manage.php"  => '附件管理',
+            "index.php" => '欢迎使用一坨',
 	);
 
 	

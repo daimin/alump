@@ -250,7 +250,6 @@ class ALump_Common {
     }
 
     public static function deEscape($val) {
-
         return htmlspecialchars_decode($val, ENT_QUOTES);
     }
 
@@ -391,6 +390,7 @@ class ALump_Common {
                 return 'text/plain';
         }
     }
+    
 
     public static function javascript($script) {
         header("Content-type:text/html");
@@ -481,9 +481,21 @@ EOT;
             return False;
         }
     }
+    
+     /**
+     * 检查GD模块是否可用
+     * @return boolean
+     */
+    public static function isGDEnabled() {
+        $gdfuncs = get_extension_funcs("gd");
+         if(!empty($gdfuncs) && count($gdfuncs) > 0){
+             return True;
+         }
+         return False;
+    }
 
     public static function decodeURIComponent($str){
-        return iconv("UTF-8", "gbk",  urldecode($str));
+        return iconv("UTF-8", "UTF-8",  urldecode($str));
     }
     /**
      * 检查文件是否能上传
@@ -536,7 +548,7 @@ EOT;
      * @param type $file
      * @return boolean
      */
-    public static function delFile($filePath){
+public static function delFile($filePath){
         if (! is_dir ( $filePath )) {
             unlink ( $filePath );
             return True;
@@ -558,6 +570,56 @@ EOT;
                 return False;
             }
         }
+    }
+    
+    public static function attachImageDisplay($fileext){
+        switch($fileext){
+            case 'zip':
+            case 'rar':
+            case 'tar':
+            case 'gz':
+                return 'images/crystal/page_white_zip.png';
+            case 'php':
+            case 'java':
+            case 'c':
+            case 'cpp':
+            case 'py':
+            case 'js':
+                return 'images/crystal/page_white_code.png';
+            case 'html':
+            case 'htm':
+                return 'images/crystal/page_white_world.png';
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'bmp':
+            case 'gif':
+                return 'images/crystal/page_white_picture.png';
+            case 'doc':
+            case 'docx':
+            case 'wps':
+                return 'images/crystal/page_white_word.png';
+            case 'xls':
+            case 'xlsx':
+            case 'et':
+                return 'images/crystal/page_white_excel.png';
+            case 'ppt':
+            case 'pptx':
+            case 'dps':
+                return 'images/crystal/page_white_excel.png';
+            case 'txt':
+                return 'images/crystal/page_white_text.png';
+            default:
+                return 'images/crystal/page_white.png';
+        }
+    }
+    
+    public static function getCropUrl($url){
+        $pos = strrpos('/', $url);
+        if($pos !== False){
+            return substr($url, 0, $pos).'/crop/'.substr($url, $pos + 1);
+        }
+        return $url;
     }
 
 }

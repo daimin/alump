@@ -91,9 +91,59 @@ function apply_all(op, name)
   }
 }
 
+function apply_all_comment(op, name)
+{
+  var el  = document.getElementsByTagName('input');
+  var len = el.length;
+  var ids = '';
+  
+  for(var i=0; i<len; i++) {
+    if((el[i].type=="checkbox") &&
+       (el[i].name==name) &&
+       el[i].checked == true &&
+       el[i].value != '') {
+       ids += encodeURIComponent(el[i].value) + ',';
+    }
+  }
+  
+  var action = "changeStatus";
+  var status = -1;
+  if (ids != ''){
+	  var do_action = true;
+	  if(op == "delete"){
+		  do_action = false;
+		  if(confirm("确认删除所选项?")){
+			  do_action = true;
+              action = "remove";
+		  }
+	  }else{
+          status = op;
+          do_action = true;
+      }
+	  
+	 console.log(ids);
+	  if(do_action == true){
+		  var args = {
+		    	    "action":action,
+		    	    "ids":ids,
+                    "status":status
+		    	    };
+		    $.post("",args, function (data, textStatus){	
+		    	window.location.reload();
+			}); 
+	  }
+
+  }
+}
+
 function do_filter(status)
 { 
-    location.href = '?keyword=' + $("#keyword").val() + '&category=' + $("#category").val();
+    if($("#category").length > 0){
+        location.href = '?keyword=' + $("#keyword").val() + '&category=' + $("#category").val();
+    }else{
+        location.href = '?keyword=' + $("#keyword").val();
+    }
+    
 }
 
 function goto_page(e)

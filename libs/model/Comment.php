@@ -223,6 +223,7 @@ class ALump_Comment extends ALump_Model {
 	}
     
     public static function changeStatus($id, $status){
+        if(empty($id)) return;
         $db = ALump_Db::getInstance();
         $db->update(ALump_Common::getTabName("comments"), array('status'=>$status)," `id`='$id'");
     }

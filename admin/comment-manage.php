@@ -14,10 +14,10 @@
     <div>|</div><div><a href="?s=trash" <?php is_current_class('trash') ?>>垃圾评论 ( <?php getCommentCountByStatus(ALump_Common::$TRASH) ?> )</a></div></div>
 <div class="table_list_tool" style="float:left;width:100%;">
   <span>
-  批量操作：<a  href="javascript:void(0)" onclick="apply_all('adopt', 'ids')">通过</a>，
-  <a  href="javascript:void(0)" onclick="apply_all('audit', 'ids')">待审核</a>，
-  <a  href="javascript:void(0)" onclick="apply_all('trash', 'ids')">标记为垃圾</a>，
-  <a  href="javascript:void(0)" onclick="apply_all('delete', 'ids')">删除</a>
+  批量操作：<a  href="javascript:void(0)" onclick="apply_all_comment('<?php echo ALump_Common::$ADOPT ?>', 'ids')">通过</a>，
+  <a  href="javascript:void(0)" onclick="apply_all_comment('<?php echo ALump_Common::$AUDIT ?>', 'ids')">待审核</a>，
+  <a  href="javascript:void(0)" onclick="apply_all_comment('<?php echo ALump_Common::$TRASH ?>', 'ids')">标记为垃圾</a>，
+  <a  href="javascript:void(0)" onclick="apply_all_comment('delete', 'ids')">删除</a>
   &nbsp;&nbsp;&nbsp;&nbsp;
     
   </span>
@@ -60,7 +60,7 @@
     <?php }?>
     <?php }else{?>
     <tr class="even">
-        <td colspan="5" class="td-list"><h4><?php echo '没有任何页面'; ?></h4></td>
+        <td colspan="5" class="td-list"><h4><?php echo '没有任何评论'; ?></h4></td>
     </tr>
     <?php }?>
     </tbody>

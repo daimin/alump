@@ -36,6 +36,12 @@
      if(ALump_Common::fileCanUpload()) echo '可以'; else echo '<span class="warn">不可以</span>';
      ?> </td>
 	</tr>
+    <tr> 
+	<td width="50%">GD 图片库: <?php 
+     if(ALump_Common::isGDEnabled()) echo '可用'; else echo '<span class="warn">不可用</span>';
+     ?></td>
+	
+	</tr>
 	<tr> 
 	<td>服务器地址: <?php echo $_SERVER['SERVER_ADDR'] ?></td>
 	<td width="50%">服务器时区: <?php echo date_default_timezone_get() ?> </td>

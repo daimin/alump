@@ -21,6 +21,7 @@ class ALump_Post extends ALump_Model {
 	private $_author = null;
 	private $_category = null;
 	private $_tags = null;
+    private $_attachJson = null;
 	
 	
 	function __construct($row){
@@ -197,6 +198,35 @@ class ALump_Post extends ALump_Model {
 		return $posts;
 	}
     
+    
+    public static function getAttachListAdmin(){
+        $db = ALump_Db::getInstance();
+		
+		$keyword = ALump::$request->get("keyword");
+		$where = "`type`='attachment' ";
+		if(!empty($keyword)){
+			$where .= " and `title` like '%$keyword%' ";
+		}
+		
+		$count = $db->count(ALump_Common::getTabName("posts"),null,array("where"=>$where));
+		
+		$posts = new ALump_Array($count);
+	
+		// 设置分页的链接参数
+		$posts->setPageNavParams("&keyword=".ALump::$request->get("keyword"));
+		
+		$db->select(ALump_Common::getTabName("posts"), null, array(
+				  "where" => $where,
+				  "order" => "`created` desc",
+				  "limit" => $posts->pageNav->limitSql()));
+		$rows = $db->fetch_array();
+		
+		foreach($rows as $row){
+			$posts->add(new ALump_Post($row));
+		}
+	
+		return $posts;
+    }
   
 	
 	/**
@@ -613,6 +643,39 @@ class ALump_Post extends ALump_Model {
 		
 		return $this->$property;
 	}
+    
+    public function attachHeadImg(){
+        if($this->type == 'attachment'){
+            
+            $content = $this->_decodeAttach();
+        
+            if(!empty($content) && isset($content->name)){
+               $fileext = substr(strrchr($content->name, '.'), 1);
+               echo '<img src="'.ALump_Common::attachImageDisplay($fileext).'" style="height:32px;width:32px;border:none;margin-right:6px;" />';
+                return;
+            }
+            
+        }
+        
+        echo '';
+    }
+    
+    private function _decodeAttach(){
+        if(empty($this->_attachJson)){
+            $json = new Services_JSON();
+            $this->_attachJson = $json->decode($this->content);
+        }
+        
+        return $this->_attachJson;
+    }
+ 
+    
+    public function attachEditLink(){
+        $jsonObj = $this->_decodeAttach();
+
+        $url = ALump::$options->siteUrl($jsonObj->path, False);
+        echo ALump_Common::getCropUrl($url);
+    }
 	
 	
 	

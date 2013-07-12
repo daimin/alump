@@ -291,6 +291,17 @@ class ALump_Options{
             echo '';
         }
     }
+    
+    public function __get($name){
+        // 不存在该变量时候，就会调用__get函数。
+        if($name == "thumbImgSize"){
+            echo 100;
+        }
+        if($name == "cropImgSize"){
+            echo 400;
+        }
+        
+    }
 	
 	
 }

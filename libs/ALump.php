@@ -142,6 +142,10 @@ class ALump {
     public function CommentsListAdmin(){
         return ALump_Comment::getCommentsPageByStatus();
     }
+    
+    public function AttachListAdmin(){
+        return ALump_Post::getAttachListAdmin();
+    }
 	
 	
 	

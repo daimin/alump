@@ -12,6 +12,7 @@ KindEditor.plugin('filemanager', function(K) {
 		fileManagerJson = K.undef(self.fileManagerJson, self.basePath + 'php/file_manager_json.php'),
 		imgPath = self.pluginsPath + name + '/images/',
 		lang = self.lang(name + '.');
+    
 	function makeFileTitle(filename, filesize, datetime) {
 		return filename + ' (' + Math.ceil(filesize / 1024) + 'KB, ' + datetime + ')';
 	}

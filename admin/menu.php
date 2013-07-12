@@ -70,7 +70,7 @@
               </li> 
               <li>
               <div class="items">
-                <div class="fllct"><i class="icon-picture"></i><a href="setting.php" >附件</a></div>
+                <div class="fllct"><i class="icon-picture"></i><a href="attach-manage.php" >附件</a></div>
               </div>
             </li>
             <li>

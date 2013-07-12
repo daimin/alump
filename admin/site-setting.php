@@ -153,7 +153,17 @@
       <div class="info">    
 只有在服务器支持GD时才可以开启.</div>
     </div>
-	
+    <div class="clear"></div>
+	<div class="field">
+      <div class="label">图像大小</div>
+      <div class="textbox">
+      缩略图大小 <input type="text" size="4" name="thumbImgSize" value="<?php  echo ALump::$options->thumbImgSize ?>">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      裁剪图大小 <input type="text" size="4" name="cropImgSize" value="<?php  echo ALump::$options->cropImgSize ?>">
+      </div>
+      <div class="info">    
+只有在服务器支持GD时才可以开启.<br/>裁剪图表示合乎页面显示的图像.</div>
+    </div>
     <div class="clear"></div>
     <div class="field">
       <div class="label"></div>

@@ -30,6 +30,16 @@ class ALump_FolksController extends Alump_BaseController {
         }
         include __ROOT_DIR__ . '/libs/folks/UploadAttach.php';
     }
+    
+    public function fileManager(){
+        if(empty($_file_save_dir)){
+            if(isset($_GET['dir'])){
+                $_file_save_dir = $_GET['dir'];
+            }
+            
+        }
+        include __ROOT_DIR__ . '/libs/folks/FileManager.php';
+    }
 }
 
 ?>

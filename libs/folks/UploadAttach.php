@@ -1,12 +1,10 @@
 <?php
-
 if(!ALump_Common::isLogined()){
 	alert('没有执行该操作的权限');
 	exit;
 }
 
-$php_path = dirname(__FILE__) . '/';
-
+include __ROOT_DIR__.'/libs/folks/Thumb.php';
 
 $php_url = dirname(Alump::$request->server('PHP_SELF')) . '/';
 
@@ -15,7 +13,7 @@ $upload_url = '../..'.__UPLOAD_DIR__;
 //文件保存目录路径
 $save_path = __ROOT_DIR__ . __UPLOAD_DIR__;
 //文件保存目录URL
-$save_url = '/'.$php_url . $upload_url.'/';
+$save_url = $php_url . $upload_url.'/';
 
 //定义允许上传的文件扩展名
 $ext_arr = array(
@@ -24,6 +22,7 @@ $ext_arr = array(
 	'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
 	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
 );
+
 //最大文件大小(4M)
 $max_size = 4194304;
 
@@ -114,6 +113,7 @@ if (empty($_FILES) === false) {
 			mkdir($save_path);
 		}
 	}
+    
 	$ymd = date("Ymd");
 	$save_path .= $ymd . "/";
 	$save_url .= $ymd . "/";
@@ -128,8 +128,31 @@ if (empty($_FILES) === false) {
 		alert("上传文件失败。");
 	}
 	@chmod($file_path, 0644);
-	$file_url = $save_url . $new_file_name;
-
+    
+    $file_url = $save_url . $new_file_name;
+    
+    if($dir_name == 'image'){
+        // 生成缩略图
+        $save_path_thumb = $save_path.'thumb/';
+        if (!file_exists($save_path_thumb)) {
+           mkdir($save_path_thumb);
+        }
+        $file_path_thumb = $save_path_thumb.$new_file_name;
+        new ALump_Thumb($file_path, ALump::$options->thumbImgSize, ALump::$options->thumbImgSize, "0", $file_path_thumb);
+        @chmod($file_path_thumb, 0644);
+        // 生成裁剪图
+        $save_path_crop = $save_path.'crop/';
+        if (!file_exists($save_path_crop)) {
+           mkdir($save_path_crop);
+        }
+        $file_path_crop = $save_path_crop.$new_file_name;
+        
+        new ALump_Thumb($file_path, ALump::$options->cropImgSize, ALump::$options->cropImgSize, "0", $file_path_crop);
+        @chmod($file_path_crop, 0644);
+        
+        $file_url = $save_url .'crop/'. $new_file_name;
+    }
+    
 	header('Content-type: text/html; charset=UTF-8');
 	$json = new Services_JSON();
 	
@@ -159,10 +182,10 @@ if (empty($_FILES) === false) {
 	));
 	
 	$attach_id = Alump_Post::save($attach);
-	ALump_Logger::log($json_filedata);
 	/*
 	 * end
 	 */
+    ALump_Logger::log($file_url);
 	echo $json->encode(array('error' => 0, 'url' => $file_url));
 	exit;
 }

@@ -10,6 +10,7 @@ if(!defined("__ROOT_DIR__")){
   <title><?php echo ALump_Admin::menu().' - '?><?php echo ALump_Common::$CMS_NAME?> | <?php echo ALump_Common::$VERSION_INFO?></title>
   <link style="text/css" rel="stylesheet" href="styles/style.css">
   <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="js/imgpreview.min.jquery.js"></script>
   <script type="text/javascript" src="js/alump_admin.js"></script>
 </head>
 <body>
