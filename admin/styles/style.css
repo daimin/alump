@@ -420,10 +420,8 @@ border:solid 1px #e0e0e0;
 }
 
 #imgPreviewWithStyles {
-    background: #00CCCC;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-    padding: 6px;
     z-index: 999;
     border: none;
 }
